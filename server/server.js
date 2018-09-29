@@ -2,19 +2,18 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
-
 const {generateMessage, generateLocationMessage} = require('./utils/message');
 const {isRealString} = require('./utils/validation');
 const {Users} = require('./utils/users');
-
-const publicPath = path.join(__dirname, '../public');
+const staticPath = path.join(__dirname, '../public');
+const viewsPath = path.join(__dirname, '../public/views');
+const uuid = require("uuid");
 const port = process.env.PORT || 8000;
 var app = express();
+var engine = require('consolidate');
 var server = http.createServer(app);
 var io = socketIO(server);
 var users = new Users();
-
-app.use(express.static(publicPath));
 
 io.on('connection', (socket) => {
   console.log('New user connected');
@@ -62,6 +61,16 @@ io.on('connection', (socket) => {
   });
 });
 
+app.use(express.static(staticPath));
+app.set('views', viewsPath);
+app.engine('html', engine.mustache);
+app.set('view engine', 'html');
+app.get('*', function(req, res) {
+  res.render('index',{ 
+    uuid : uuid.v4() 
+  });
+});
+
 server.listen(port, () => {
-  console.log(`Server is up on ${port}`);
+  console.log(`Server is up on http://localhost:${port}`);
 });

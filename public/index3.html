@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Xendo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="/css/gibson.css">
+  <link rel="stylesheet" href="/css/bulma.css">  
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/swiper.min.css">
+</head>
+<body>
+  <div class="swiper-container swiper-container-m" id="app">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide menu">Xendo</div>
+      <div class="swiper-slide content">
+        <div class="menu-button">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+        </div>
+        
+        <keep-alive>
+          <router-view :key="$route.fullPath">
+            <div class="container-spinner">
+              <div class="loaders">
+                <svg class="spinner"><circle cx="20" cy="20" r="18"></circle></svg>
+              </div>
+            </div>        
+          </router-view>
+        </keep-alive>
+      </div>
+    </div>
+  </div>
+
+  <script id="splash" type="text/x-template">
+    <div class="swiper-container swiper-container-v">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">Slide 1</div>
+            <div class="swiper-slide">Slide 2</div>
+            <div class="swiper-slide">Slide 3</div>
+            <div class="swiper-slide">Slide 4</div>
+            <div class="swiper-slide">Slide 5</div>
+            <div class="swiper-slide">Slide 6</div>
+            <div class="swiper-slide">Slide 7</div>
+            <div class="swiper-slide">Slide 8</div>
+            <div class="swiper-slide">Slide 9</div>
+            <div class="swiper-slide">Slide 10</div>
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+    </div>
+  </script>
+
+  <script id="hub" type="text/x-template">
+  </script>
+
+  <script id="chat" type="text/x-template">
+    <div class="chat">
+      <div class="chat__sidebar">
+        <h3>People</h3>
+        <div id="users"></div>
+      </div>
+
+      <div class="chat__main">
+        <ol id="messages" class="chat__messages"></ol>
+
+        <div class="chat__footer">
+          <form id="message-form">
+            <input name="message" type="text" placeholder="Message" autofocus autocomplete="off"/>
+            <button>Send</button>
+          </form>
+          <button id="send-location">Send location</button>
+        </div>
+      </div>    
+    </div>
+  </script>
+
+  <script id="message-template" type="text/template">
+    <li class="message">
+      <div class="message__title">
+        <h4>{{from}}</h4>
+        <span>{{createdAt}}</span>
+      </div>
+      <div class="message__body">
+        <p>{{text}}</p>
+      </div>
+    </li>
+  </script>
+
+  <script id="location-message-template" type="text/template">
+    <li class="message">
+      <div class="message__title">
+        <h4>{{from}}</h4>
+        <span>{{createdAt}}</span>
+      </div>
+      <div class="message__body">
+        <p>
+          <a href="{{url}}" target="_blank">My current location</a>
+        </p>
+      </div>
+    </li>
+  </script>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/vue.min.js" type="text/javascript"></script>  
+  <script src="/js/vue-router.js" type="text/javascript"></script>  
+  <script src="/js/vue-resource.min.js" type="text/javascript"></script> 
+  <script src="/js/libs/swiper.min.js"></script>
+  <script src="/js/libs/jquery-3.1.0.min.js"></script>
+  <script src="/js/libs/moment.js"></script>
+  <script src="/js/libs/mustache.js"></script>  
+  <script src="/js/libs/deparam.js"></script>  
+  <script src="/js/routes.js" type="text/javascript"></script>  
+
+</body>
+</html>

@@ -1,0 +1,217 @@
+function scrollToBottom () {
+	// Selectors
+	var messages = jQuery('#messages');
+	var newMessage = messages.children('li:last-child')
+	// Heights
+	var clientHeight = messages.prop('clientHeight');
+	var scrollTop = messages.prop('scrollTop');
+	var scrollHeight = messages.prop('scrollHeight');
+	var newMessageHeight = newMessage.innerHeight();
+	var lastMessageHeight = newMessage.prev().innerHeight();
+
+	if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
+		messages.scrollTop(scrollHeight);
+	}
+}
+
+const Splash = {
+	template: '#splash',
+	mounted : function(){
+		setTimeout(function(){
+			const swiper = new Swiper('.swiper-container-v', {
+				direction: 'vertical',
+				slidesPerView: 1,
+				spaceBetween: 30,
+				mousewheel: true,
+				pagination: {
+					el: '.swiper-pagination',
+					clickable: true,
+				},
+			});
+		},0);
+	}
+}
+
+const Hub = {
+	template: '#hub',
+	mounted : function(){
+		console.log(this.$route.params.uuid)
+		var displayName = prompt("Ingresa tu nombre","Usuario");
+		if (displayName == null || displayName == "") {
+			alert("Debes ingresar un nombre válido")
+		} else {
+			localStorage.setItem("displayName",displayName);
+			this.$router.push('/' + this.$route.params.uuid);
+		}
+	}
+}
+
+const Chat = {
+	template: '#chat',
+	mounted : function(){
+		var socket = io();
+
+		socket.on('connect', function () {
+		  var params = jQuery.deparam(window.location.search);
+
+		  socket.emit('join', params, function (err) {
+		    if (err) {
+		      alert(err);
+		      window.location.href = '/';
+		    } else {
+		      console.log('No error');
+		    }
+		  });
+		});
+
+		socket.on('disconnect', function () {
+		  console.log('Disconnected from server');
+		});
+
+		socket.on('updateUserList', function (users) {
+		  var ol = jQuery('<ol></ol>');
+
+		  users.forEach(function (user) {
+		    ol.append(jQuery('<li></li>').text(user));
+		  });
+
+		  jQuery('#users').html(ol);
+		});
+
+		socket.on('newMessage', function (message) {
+		  var formattedTime = moment(message.createdAt).format('h:mm a');
+		  var template = jQuery('#message-template').html();
+		  var html = Mustache.render(template, {
+		    text: message.text,
+		    from: message.from,
+		    createdAt: formattedTime
+		  });
+
+		  jQuery('#messages').append(html);
+		  scrollToBottom();
+		});
+
+		socket.on('newLocationMessage', function (message) {
+		  var formattedTime = moment(message.createdAt).format('h:mm a');
+		  var template = jQuery('#location-message-template').html();
+		  var html = Mustache.render(template, {
+		    from: message.from,
+		    url: message.url,
+		    createdAt: formattedTime
+		  });
+
+		  jQuery('#messages').append(html);
+		  scrollToBottom();
+		});
+
+		jQuery('#message-form').on('submit', function (e) {
+		  e.preventDefault();
+
+		  var messageTextbox = jQuery('[name=message]');
+
+		  socket.emit('createMessage', {
+		    text: messageTextbox.val()
+		  }, function () {
+		    messageTextbox.val('')
+		  });
+		});
+
+		var locationButton = jQuery('#send-location');
+		locationButton.on('click', function () {
+		  if (!navigator.geolocation) {
+		    return alert('Geolocation not supported by your browser.');
+		  }
+
+		  locationButton.attr('disabled', 'disabled').text('Sending location...');
+
+		  navigator.geolocation.getCurrentPosition(function (position) {
+		    locationButton.removeAttr('disabled').text('Send location');
+		    socket.emit('createLocationMessage', {
+		      latitude: position.coords.latitude,
+		      longitude: position.coords.longitude
+		    });
+		  }, function () {
+		    locationButton.removeAttr('disabled').text('Send location');
+		    alert('Unable to fetch location.');
+		  });
+		});		
+	}
+}
+
+const router = new VueRouter({
+  mode: 'history',
+  routes: [
+    {path: '/', component: Splash, meta : { title: 'Xendo1' }},
+    {path: '/hub/:uuid', component: Hub, meta : { title: 'Hub' }},
+    {path: '/:uuid', component: Chat, meta : { title: 'Chat' }}
+   ]
+});
+
+const app = new Vue({ 
+	router: router,
+	created: function(){
+		setTimeout(function(){
+			var menuButton = document.querySelector('.menu-button');
+			var swiper = new Swiper('.swiper-container-m', {
+			  slidesPerView: 'auto',
+			  initialSlide: 1,
+			  resistanceRatio: 0,
+			  slideToClickedSlide: true,
+			  on: {
+			    init: function () {
+			      var slider = this;
+			      menuButton.addEventListener('click', function () {
+			        //if (slider.activeIndex === 0) {
+					if (slider.animating) {
+			          slider.slideNext();
+			        } else {
+			          slider.slidePrev();
+			        }
+			      }, true);
+			    },
+			    slideChange: function () {
+			      var slider = this;
+			      if (slider.activeIndex === 0) {
+			        menuButton.classList.add('cross');
+			      } else {
+			        menuButton.classList.remove('cross');
+			      }
+			    },
+			  }
+			});
+		},0)		
+	} 
+}).$mount('#app');
+
+
+$(document).on('click',"a:not([href*=':'])",function(event){
+
+  const target = this;
+  // handle only links that do not reference external resources
+  if (target && target.href && !$(target).attr('bypass')) {
+    // some sanity checks taken from vue-router:
+    // https://github.com/vuejs/vue-router/blob/dev/src/components/link.js#L106
+    const { altKey, ctrlKey, metaKey, shiftKey, button, defaultPrevented } = this;
+    // don't handle with control keys
+    if (metaKey || altKey || ctrlKey || shiftKey) return;
+    // don't handle when preventDefault called
+    if (defaultPrevented) return;
+    // don't handle right clicks
+    if (button !== undefined && button !== 0) return;
+    // don't handle if `target="_blank"`
+
+    if (target && target.getAttribute) {
+      const linkTarget = target.getAttribute('target');
+      if (/\b_blank\b/i.test(linkTarget)) return;
+    }
+    // don't handle same page links/anchors
+    const url = new URL(target.href);
+    const to = url.pathname;
+
+    if (window.location.pathname !== to) {
+      app.$router.push(to);
+    }
+
+    event.preventDefault();
+  }  
+});
