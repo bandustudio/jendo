@@ -19,6 +19,8 @@ io.on('connection', (socket) => {
   console.log('New user connected');
 
   socket.on('join', (params, callback) => {
+
+    console.log(params)
     if (!isRealString(params.name) || !isRealString(params.room)) {
       return callback('Name and room name are required.');
     }
@@ -67,7 +69,7 @@ app.engine('html', engine.mustache);
 app.set('view engine', 'html');
 app.get('*', function(req, res) {
   res.render('index',{ 
-    uuid : uuid.v4() 
+    room : uuid.v4() 
   });
 });
 

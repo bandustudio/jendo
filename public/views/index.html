@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" room="{{room}}">
 <head>
   <meta charset="utf-8">
-  <title>Xendo</title>
+  <title>Jendo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
   <link rel="stylesheet" href="/css/gibson.css">
   <link rel="stylesheet" href="/css/bulma.css">  
@@ -12,12 +12,19 @@
 <body>
   <div class="swiper-container swiper-container-m" id="app">
     <div class="swiper-wrapper">
-      <div class="swiper-slide menu">Xendo</div>
+      <div class="swiper-slide menu">
+        <ul>
+          <li><a href="/" class="has-text-white">Jendo</a></li>
+          <li><a href="/hub/{{room}}" class="has-text-white">Crear</a></li>
+          <li><a href="/hub" class="has-text-white">Unirse</a></li>
+        </ul>
+      </div>
       <div class="swiper-slide content">
         <div class="menu-button">
           <div class="bar"></div>
           <div class="bar"></div>
           <div class="bar"></div>
+          <span class="has-text-info">Jendo</span>
         </div>
         
         <keep-alive>
@@ -36,16 +43,24 @@
   <script id="splash" type="text/x-template">
     <div class="swiper-container swiper-container-v">
         <div class="swiper-wrapper">
-            <div class="swiper-slide">Slide 1</div>
-            <div class="swiper-slide">Slide 2</div>
-            <div class="swiper-slide">Slide 3</div>
-            <div class="swiper-slide">Slide 4</div>
-            <div class="swiper-slide">Slide 5</div>
-            <div class="swiper-slide">Slide 6</div>
-            <div class="swiper-slide">Slide 7</div>
-            <div class="swiper-slide">Slide 8</div>
-            <div class="swiper-slide">Slide 9</div>
-            <div class="swiper-slide">Slide 10</div>
+            <div class="swiper-slide">
+              <div class="has-text-dark"> 
+                <h3 class="em">Invitá ahora a tus amigos 🤣</h3>
+                <a href="/hub/{{room}}" class="button is-medium is-danger">Crear conversación</a>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <h3 class="em">Invitá ahora a tus amigos 🤣</h3>
+            </div>
+            <div class="swiper-slide">
+              <h3 class="em">Invitá ahora a tus amigos 🚻</h3>
+            </div>
+            <div class="swiper-slide">
+              <h3 class="em">Invitá ahora a tus amigos 🛀</h3>
+            </div>
+            <div class="swiper-slide">
+              <h3 class="em">Especialmente diseñado para<br>vos y las personas en que<br>confiás. 🚲</h3>
+            </div>
         </div>
         <!-- Add Pagination -->
         <div class="swiper-pagination"></div>
@@ -53,6 +68,18 @@
   </script>
 
   <script id="hub" type="text/x-template">
+    <div class="swiper-container swiper-container-v">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <div class="has-text-dark"> 
+                <h3 class="em">Creá tu espacio o unite a uno 🤣</h3>
+                <a href="/hub/{{room}}" class="button is-medium is-danger">Crear conversación</a>
+              </div>
+            </div>
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+    </div>  
   </script>
 
   <script id="chat" type="text/x-template">

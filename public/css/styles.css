@@ -12,6 +12,27 @@ body {
 	padding: 0;
 }
 
+/* swiper hacks */
+
+.swiper-pagination-bullet-active {
+	background: #2C8DFB;
+} 
+
+.swiper-container-vertical > .swiper-pagination-bullets {	
+	right: auto;
+	left: 10px;
+	max-width: 22px;
+}
+
+.swiper-container-vertical > .swiper-pagination-bullets .swiper-pagination-bullet {
+	margin: 10px 0!important;
+}
+
+.swiper-pagination-bullet {
+	width: 22px!important;
+	height: 22px!important;	
+}
+
 .container-spinner{
 	height:100vh;
 	display:flex;

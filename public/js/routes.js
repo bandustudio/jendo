@@ -17,31 +17,34 @@ function scrollToBottom () {
 const Splash = {
 	template: '#splash',
 	mounted : function(){
-		setTimeout(function(){
-			const swiper = new Swiper('.swiper-container-v', {
-				direction: 'vertical',
-				slidesPerView: 1,
-				spaceBetween: 30,
-				mousewheel: true,
-				pagination: {
-					el: '.swiper-pagination',
-					clickable: true,
-				},
-			});
-		},0);
+		
 	}
 }
 
 const Hub = {
 	template: '#hub',
 	mounted : function(){
-		console.log(this.$route.params.uuid)
-		var displayName = prompt("Ingresa tu nombre","Usuario");
-		if (displayName == null || displayName == "") {
-			alert("Debes ingresar un nombre válido")
+		console.log(this.$route.params.room)
+		var room = this.$route.params.room || localStorage.getItem('room') || document.querySelector("html").getAttribute("room");
+		var displayName = this.$route.params.displayName || localStorage.getItem('displayName');
+		var $room = prompt("Ingresa tu identificador de salón para ingresar",room);
+		
+		if ($room == null || $room.trim() == "") {
+			alert("Debes ingresar un identificador válido")
 		} else {
-			localStorage.setItem("displayName",displayName);
-			this.$router.push('/' + this.$route.params.uuid);
+
+			var $displayName = prompt("Ingresa tu nombre","Usuario");
+
+			if ($displayName == null || $displayName.trim() == "") {
+				alert("Debes ingresar un nombre")
+			} else {
+				var chat = {
+					room: $room,
+					displayName: $displayName
+				};
+				localStorage.setItem("chat",JSON.stringify(chat));
+				this.$router.push('/' + $room);
+			}
 		}
 	}
 }
@@ -52,8 +55,7 @@ const Chat = {
 		var socket = io();
 
 		socket.on('connect', function () {
-		  var params = jQuery.deparam(window.location.search);
-
+		  var params = JSON.parse(localStorage.getItem('chat'))
 		  socket.emit('join', params, function (err) {
 		    if (err) {
 		      alert(err);
@@ -141,18 +143,41 @@ const Chat = {
 const router = new VueRouter({
   mode: 'history',
   routes: [
-    {path: '/', component: Splash, meta : { title: 'Xendo1' }},
-    {path: '/hub/:uuid', component: Hub, meta : { title: 'Hub' }},
+    {path: '/', component: Splash, meta : { title: 'Jendo1' }},
+    {path: '/hub/:uuid?/:displayName?', component: Hub, meta : { title: 'Hub' }},
     {path: '/:uuid', component: Chat, meta : { title: 'Chat' }}
    ]
 });
+
+router.afterEach(function (to, from, next) {
+	var menuButton = document.querySelector('.menu-button');
+
+	if(menuButton.classList.contains('cross')){
+		menuSwiper.slideNext();
+	}
+
+	setTimeout(function(){
+		const swiper = new Swiper('.swiper-container-v', {
+			direction: 'vertical',
+			slidesPerView: 1,
+			spaceBetween: 0,
+			mousewheel: true,
+			pagination: {
+				el: '.swiper-pagination',
+				clickable: true,
+			},
+		});
+	},0);	
+});
+
+var menuSwiper = null;
 
 const app = new Vue({ 
 	router: router,
 	created: function(){
 		setTimeout(function(){
 			var menuButton = document.querySelector('.menu-button');
-			var swiper = new Swiper('.swiper-container-m', {
+			menuSwiper = new Swiper('.swiper-container-m', {
 			  slidesPerView: 'auto',
 			  initialSlide: 1,
 			  resistanceRatio: 0,
