@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="/css/gibson.css">
   <link rel="stylesheet" href="/css/bulma.css">  
   <link rel="stylesheet" href="/css/styles.css">
+  <link rel='stylesheet' href='/css/font-awesome.min.css'>
   <link rel="stylesheet" href="/css/swiper.min.css">
 </head>
 <body>
@@ -101,7 +102,9 @@
             </div>
             <div class="control">
               <button class="button is-info">
-                Send
+                <span class="icon has-text-white">
+                  <i class="fa fa-send"></i>
+                </span>
               </button>
             </div>
           </div>
@@ -109,6 +112,18 @@
       </div>
 
       <div id="map"></div>
+      <div id='menu'>
+        <div class="select is-small is-rounded">
+          <select id="styles">
+            <option value="basic">Básico</option>
+            <option value="streets">Calles</option>
+            <option value="bright">Luminoso</option>
+            <option value="light">Claro</option>
+            <option value="dark">Oscuro</option>
+            <option value="satellite">Satélite</option>
+          </select>
+        </div>
+      </div>       
     </div>
   </script>
 

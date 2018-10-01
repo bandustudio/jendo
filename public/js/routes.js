@@ -1,34 +1,13 @@
 const mapbox = {
 	accessToken : 'pk.eyJ1IjoibWFydGluZnJlZSIsImEiOiJ5ZFd0U19vIn0.Z7WBxuf0QKPrdzv2o6Mx6A',
-	initLayers:function(map){
-		var layerList = document.getElementById('menu');
-		var inputs = layerList.getElementsByTagName('input');
-		for (var i = 0; i < inputs.length; i++) {
-		    inputs[i].onclick = mapbox.switchLayer;
-		}
-		mapbox.checkStyle(map);
-	},
-	checkStyle:function(map){
-		var storage = JSON.parse(localStorage.getItem("style"))||null;
-		var style = storage||mapbox.style;
-		if(storage){
-			var layerList = document.getElementById('menu');
-			var inputs = layerList.getElementsByTagName('input');
-			for (var i = 0; i < inputs.length; i++) {
-				var item = $(inputs[i]) 
-				item.prop('checked',(item.val()==style.id))
-			}
-		}
-	    map.setStyle(style.url);
-	},
-	switchLayer: function (layer) {
-	    var style = {
-	    	id:layer.target.id,
-	    	url:'mapbox://styles/mapbox/' + layer.target.id + '-v9'
-	    };
-	    localStorage.setItem("style", JSON.stringify(style));
-	    map.setStyle(style.url);
-	}	
+	style: 'mapbox://styles/mapbox/basic-v8'
+}
+
+function createRandomString( length ) {
+    
+    var str = "";
+    for ( ; str.length < length; str += Math.random().toString( 36 ).substr( 2 ) );
+    return str.substr( 0, length );
 }
 
 function scrollToBottom () {
@@ -92,32 +71,10 @@ const Chat = {
 	name:'chat',
 	mounted : function(){
 		var socket = io();
-		var chat = JSON.parse(localStorage.getItem('chat'))||{room:null,name:null};
-		var room = this.$route.params.room || chat.room;
-		var name = this.$route.params.name || chat.name;
+		var chat = JSON.parse(localStorage.getItem('chat'));
+		if(!chat) chat = {room:createRandomString(6),name:createRandomString(6)};
+		localStorage.setItem("chat",JSON.stringify(chat));
 		var self = this;
-
-		if(!room || !name){
-			room = room || document.querySelector("html").getAttribute("room");
-			var $room = prompt("Ingresa tu identificador de salón para ingresar",room);
-		
-			if ($room == null || $room.trim() == "") {
-				alert("Debes ingresar un identificador válido")
-			} else {
-
-				var $name = prompt("Ingresa tu nombre","Usuario");
-
-				if ($name == null || $name.trim() == "") {
-					alert("Debes ingresar un nombre")
-				} else {
-					var chat = {
-						room: $room,
-						name: $name
-					};
-					localStorage.setItem("chat",JSON.stringify(chat));
-				}
-			}
-		} 
 
 		/* socket */
 
@@ -162,6 +119,7 @@ const Chat = {
 		});
 
 		socket.on('newLocationMessage', function (message) {
+			console.log(message);
 		    if(!self.markers[message.from]){
 		        var el = document.createElement('div');
 		        var template = jQuery('#marker').html();
@@ -191,10 +149,12 @@ const Chat = {
 	        self.map = new mapboxgl.Map({
 	            container: 'map',
 	            center: [0,0],
-	            style:'mapbox://styles/mapbox/basic-v9',
-	            zoom: 15
+	            style:mapbox.style,
+	            zoom: 13
 	        });
-        },1)
+
+			self.initLayers();        
+        },1);
 
 	  	if (!navigator.geolocation) {
 	    	alert('Geolocation not supported by your browser.');
@@ -247,6 +207,29 @@ const Chat = {
 		    	alert('Unable to fetch location.');
 		  	});
 		});		
+	},
+	methods: {
+		initLayers:function(){
+			var styleList = document.getElementById('styles');
+			styleList.onchange = this.switchLayer
+			this.setStyle();
+		},	
+		setStyle:function(){
+			var style = JSON.parse(localStorage.getItem("style"));
+			if(style){
+				var styleList = document.getElementById('styles');
+				$(styleList).val(style.id);
+		    	this.map.setStyle(style.url);
+			}
+		},
+		switchLayer: function (layer) {
+		    var style = {
+		    	id:layer.target.value,
+		    	url:'mapbox://styles/mapbox/' + layer.target.value + '-v9'
+		    };
+		    localStorage.setItem("style", JSON.stringify(style));
+		    this.map.setStyle(style.url);
+		}	
 	},
 	data: function() {
 		return{

@@ -28,8 +28,6 @@ io.on('connection', (socket) => {
     users.removeUser(socket.id);
     users.addUser(socket.id, params.name, params.room);
 
-    console.log(params.room)
-    console.log(users.getUserList(params.room))
     io.to(params.room).emit('updateUserList', users.getUserList(params.room));
     socket.emit('newMessage', generateMessage('Bot', 'Bienvenido'));
     socket.broadcast.to(params.room).emit('newMessage', generateMessage('Bot', `${params.name} se ha sumado a la conversación.`));
@@ -48,7 +46,6 @@ io.on('connection', (socket) => {
 
   socket.on('createLocationMessage', (coords) => {
     var user = users.getUser(socket.id);
-
     if (user) {
       io.to(user.room).emit('newLocationMessage', generateLocationMessage(user.name, coords.latitude, coords.longitude));  
     }
