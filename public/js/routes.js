@@ -1,3 +1,36 @@
+const mapbox = {
+	accessToken : 'pk.eyJ1IjoibWFydGluZnJlZSIsImEiOiJ5ZFd0U19vIn0.Z7WBxuf0QKPrdzv2o6Mx6A',
+	initLayers:function(map){
+		var layerList = document.getElementById('menu');
+		var inputs = layerList.getElementsByTagName('input');
+		for (var i = 0; i < inputs.length; i++) {
+		    inputs[i].onclick = mapbox.switchLayer;
+		}
+		mapbox.checkStyle(map);
+	},
+	checkStyle:function(map){
+		var storage = JSON.parse(localStorage.getItem("style"))||null;
+		var style = storage||mapbox.style;
+		if(storage){
+			var layerList = document.getElementById('menu');
+			var inputs = layerList.getElementsByTagName('input');
+			for (var i = 0; i < inputs.length; i++) {
+				var item = $(inputs[i]) 
+				item.prop('checked',(item.val()==style.id))
+			}
+		}
+	    map.setStyle(style.url);
+	},
+	switchLayer: function (layer) {
+	    var style = {
+	    	id:layer.target.id,
+	    	url:'mapbox://styles/mapbox/' + layer.target.id + '-v9'
+	    };
+	    localStorage.setItem("style", JSON.stringify(style));
+	    map.setStyle(style.url);
+	}	
+}
+
 function scrollToBottom () {
 	// Selectors
 	var messages = jQuery('#messages');
@@ -21,38 +54,72 @@ const Splash = {
 	}
 }
 
-const Hub = {
-	template: '#hub',
+const Join = {
+	template: '#join',
 	mounted : function(){
-		console.log(this.$route.params.room)
-		var room = this.$route.params.room || localStorage.getItem('room') || document.querySelector("html").getAttribute("room");
-		var displayName = this.$route.params.displayName || localStorage.getItem('displayName');
-		var $room = prompt("Ingresa tu identificador de salón para ingresar",room);
+		var room = this.$route.params.room || localStorage.getItem('room');
+		var name = this.$route.params.name || localStorage.getItem('name');
+
+		if(!room && !name){
+			room = document.querySelector("html").getAttribute("room");
+			var $room = prompt("Ingresa tu identificador de salón para ingresar",room);
 		
-		if ($room == null || $room.trim() == "") {
-			alert("Debes ingresar un identificador válido")
-		} else {
-
-			var $displayName = prompt("Ingresa tu nombre","Usuario");
-
-			if ($displayName == null || $displayName.trim() == "") {
-				alert("Debes ingresar un nombre")
+			if ($room == null || $room.trim() == "") {
+				alert("Debes ingresar un identificador válido")
 			} else {
-				var chat = {
-					room: $room,
-					displayName: $displayName
-				};
-				localStorage.setItem("chat",JSON.stringify(chat));
-				this.$router.push('/' + $room);
+
+				var $name = prompt("Ingresa tu nombre","Usuario");
+
+				if ($name == null || $name.trim() == "") {
+					alert("Debes ingresar un nombre")
+				} else {
+					var chat = {
+						room: $room,
+						name: $name
+					};
+					localStorage.setItem("chat",JSON.stringify(chat));
+					this.$router.push('/' + $room);
+				}
 			}
+		} else {
+			this.$router.push('/' + room);
 		}
 	}
 }
 
 const Chat = {
 	template: '#chat',
+	name:'chat',
 	mounted : function(){
 		var socket = io();
+		var chat = JSON.parse(localStorage.getItem('chat'))||{room:null,name:null};
+		var room = this.$route.params.room || chat.room;
+		var name = this.$route.params.name || chat.name;
+		var self = this;
+
+		if(!room || !name){
+			room = room || document.querySelector("html").getAttribute("room");
+			var $room = prompt("Ingresa tu identificador de salón para ingresar",room);
+		
+			if ($room == null || $room.trim() == "") {
+				alert("Debes ingresar un identificador válido")
+			} else {
+
+				var $name = prompt("Ingresa tu nombre","Usuario");
+
+				if ($name == null || $name.trim() == "") {
+					alert("Debes ingresar un nombre")
+				} else {
+					var chat = {
+						room: $room,
+						name: $name
+					};
+					localStorage.setItem("chat",JSON.stringify(chat));
+				}
+			}
+		} 
+
+		/* socket */
 
 		socket.on('connect', function () {
 		  var params = JSON.parse(localStorage.getItem('chat'))
@@ -71,18 +138,19 @@ const Chat = {
 		});
 
 		socket.on('updateUserList', function (users) {
-		  var ol = jQuery('<ol></ol>');
+		  var ul = jQuery('<ul></ul>');
 
 		  users.forEach(function (user) {
-		    ol.append(jQuery('<li></li>').text(user));
+		    ul.append(jQuery('<li></li>').text(user));
 		  });
 
-		  jQuery('#users').html(ol);
+		  jQuery('#users').html(ul);
 		});
 
 		socket.on('newMessage', function (message) {
 		  var formattedTime = moment(message.createdAt).format('h:mm a');
 		  var template = jQuery('#message-template').html();
+
 		  var html = Mustache.render(template, {
 		    text: message.text,
 		    from: message.from,
@@ -94,17 +162,59 @@ const Chat = {
 		});
 
 		socket.on('newLocationMessage', function (message) {
-		  var formattedTime = moment(message.createdAt).format('h:mm a');
-		  var template = jQuery('#location-message-template').html();
-		  var html = Mustache.render(template, {
-		    from: message.from,
-		    url: message.url,
-		    createdAt: formattedTime
-		  });
+		    if(!self.markers[message.from]){
+		        var el = document.createElement('div');
+		        var template = jQuery('#marker').html();
+				var html = Mustache.render(template, {
+				    from: message.from
+				});		        
+				el.innerHTML = html
+		        self.markers[message.from] = new mapboxgl.Marker(el)
+		    }
 
-		  jQuery('#messages').append(html);
-		  scrollToBottom();
+		    self.markers[message.from].setLngLat([message.longitude,message.latitude])
+		    self.markers[message.from].addTo(self.map)
+		    $(self.markers[message.from].getElement()).removeClass('pulse').addClass('pulse')
+
+		    if(self.markers.length > 1){
+			    var bounds = new mapboxgl.LngLatBounds();
+			    bounds.extend([message.longitude,message.latitude]);
+			    self.map.fitBounds(bounds, { padding: 50 });
+			} else {
+				self.map.setCenter([message.longitude,message.latitude]);
+			}
 		});
+
+		/* map and geoloc */
+		setTimeout(function(){
+        	mapboxgl.accessToken = mapbox.accessToken
+	        self.map = new mapboxgl.Map({
+	            container: 'map',
+	            center: [0,0],
+	            style:'mapbox://styles/mapbox/basic-v9',
+	            zoom: 15
+	        });
+        },1)
+
+	  	if (!navigator.geolocation) {
+	    	alert('Geolocation not supported by your browser.');
+	  	} else {
+
+		  	navigator.geolocation.watchPosition(function(position){
+			    socket.emit('createLocationMessage', {
+			      	latitude: position.coords.latitude,
+			      	longitude: position.coords.longitude
+			    });
+
+		  	}, function(e) {
+		  		alert('Could not get coords.');
+		  	}, {
+	        	enableHighAccuracy: true,
+	        	maximumAge: 5000 // 5 sec.
+	      	});
+		}
+
+		/* click events */
 
 		jQuery('#message-form').on('submit', function (e) {
 		  e.preventDefault();
@@ -120,32 +230,38 @@ const Chat = {
 
 		var locationButton = jQuery('#send-location');
 		locationButton.on('click', function () {
-		  if (!navigator.geolocation) {
-		    return alert('Geolocation not supported by your browser.');
-		  }
+		  	if (!navigator.geolocation) {
+		    	return alert('Geolocation not supported by your browser.');
+		  	}
 
-		  locationButton.attr('disabled', 'disabled').text('Sending location...');
+		  	locationButton.attr('disabled', 'disabled').text('Sending location...');
 
-		  navigator.geolocation.getCurrentPosition(function (position) {
-		    locationButton.removeAttr('disabled').text('Send location');
-		    socket.emit('createLocationMessage', {
-		      latitude: position.coords.latitude,
-		      longitude: position.coords.longitude
-		    });
-		  }, function () {
-		    locationButton.removeAttr('disabled').text('Send location');
-		    alert('Unable to fetch location.');
-		  });
+		  	navigator.geolocation.getCurrentPosition(function (position) {
+		    	locationButton.removeAttr('disabled').text('Send location');
+			    socket.emit('createLocationMessage', {
+			      	latitude: position.coords.latitude,
+			      	longitude: position.coords.longitude
+			    });
+		  	}, function () {
+		    	locationButton.removeAttr('disabled').text('Send location');
+		    	alert('Unable to fetch location.');
+		  	});
 		});		
+	},
+	data: function() {
+		return{
+		  	map:null,
+		  	markers:[]
+		}
 	}
 }
 
 const router = new VueRouter({
   mode: 'history',
   routes: [
-    {path: '/', component: Splash, meta : { title: 'Jendo1' }},
-    {path: '/hub/:uuid?/:displayName?', component: Hub, meta : { title: 'Hub' }},
-    {path: '/:uuid', component: Chat, meta : { title: 'Chat' }}
+    {path: '/', component: Splash, meta : { title: 'Jendo' }},
+    {path: '/join/:room?/:name?', component: Join, meta : { title: 'Unete' }},
+    {path: '/:room/:name?', component: Chat, meta : { title: 'Jendo' }}
    ]
 });
 
@@ -240,3 +356,5 @@ $(document).on('click',"a:not([href*=':'])",function(event){
     event.preventDefault();
   }  
 });
+
+Mustache.tags = ["[[", "]]"];

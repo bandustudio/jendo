@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <title>Jendo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+  <link href='https://api.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.css' rel='stylesheet' />
   <link rel="stylesheet" href="/css/gibson.css">
   <link rel="stylesheet" href="/css/bulma.css">  
   <link rel="stylesheet" href="/css/styles.css">
@@ -15,8 +16,8 @@
       <div class="swiper-slide menu">
         <ul>
           <li><a href="/" class="has-text-white">Jendo</a></li>
-          <li><a href="/hub/{{room}}" class="has-text-white">Crear</a></li>
-          <li><a href="/hub" class="has-text-white">Unirse</a></li>
+          <li><a href="/{{room}}" class="has-text-white">Crear</a></li>
+          <li><a href="/join" class="has-text-white">Unirse</a></li>
         </ul>
       </div>
       <div class="swiper-slide content">
@@ -27,7 +28,7 @@
           <span class="has-text-info">Jendo</span>
         </div>
         
-        <keep-alive>
+        <keep-alive exlcude="chat">
           <router-view :key="$route.fullPath">
             <div class="container-spinner">
               <div class="loaders">
@@ -45,21 +46,21 @@
         <div class="swiper-wrapper">
             <div class="swiper-slide">
               <div class="has-text-dark"> 
-                <h3 class="em">Invitá ahora a tus amigos 🤣</h3>
-                <a href="/hub/{{room}}" class="button is-medium is-danger">Crear conversación</a>
+                <h3>Invitá ahora a tus amigos 🚢</h3>
+                <a href="/{{room}}" class="button is-medium is-danger">Crear conversación</a>
               </div>
             </div>
             <div class="swiper-slide">
-              <h3 class="em">Invitá ahora a tus amigos 🤣</h3>
+              <h3>Invitá ahora a tus amigos 🤣</h3>
             </div>
             <div class="swiper-slide">
-              <h3 class="em">Invitá ahora a tus amigos 🚻</h3>
+              <h3>Invitá ahora a tus amigos 🚻</h3>
             </div>
             <div class="swiper-slide">
-              <h3 class="em">Invitá ahora a tus amigos 🛀</h3>
+              <h3>Invitá ahora a tus amigos 🛀</h3>
             </div>
             <div class="swiper-slide">
-              <h3 class="em">Especialmente diseñado para<br>vos y las personas en que<br>confiás. 🚲</h3>
+              <h3>Especialmente diseñado para<br>vos y las personas en que<br>confiás. 🚲</h3>
             </div>
         </div>
         <!-- Add Pagination -->
@@ -67,13 +68,13 @@
     </div>
   </script>
 
-  <script id="hub" type="text/x-template">
+  <script id="join" type="text/x-template">
     <div class="swiper-container swiper-container-v">
         <div class="swiper-wrapper">
             <div class="swiper-slide">
               <div class="has-text-dark"> 
-                <h3 class="em">Creá tu espacio o unite a uno 🤣</h3>
-                <a href="/hub/{{room}}" class="button is-medium is-danger">Crear conversación</a>
+                <h3>Unete a la conversación ahora 🤣</h3>
+                <a href="/{{room}}" class="button is-medium is-danger">Crear grupo</a>
               </div>
             </div>
         </div>
@@ -84,52 +85,45 @@
 
   <script id="chat" type="text/x-template">
     <div class="chat">
-      <div class="chat__sidebar">
-        <h3>People</h3>
+      <div class="chat__users">
         <div id="users"></div>
       </div>
 
-      <div class="chat__main">
-        <ol id="messages" class="chat__messages"></ol>
+      <div class="chat__messages">
+        <ul id="messages"></ul>
+      </div>
 
-        <div class="chat__footer">
-          <form id="message-form">
-            <input name="message" type="text" placeholder="Message" autofocus autocomplete="off"/>
-            <button>Send</button>
-          </form>
-          <button id="send-location">Send location</button>
-        </div>
-      </div>    
+      <div class="chat__input">
+        <form id="message-form" class="field is-horizontal">
+          <div class="field has-addons">
+            <div class="controls">
+              <input class="input" type="text" name="message" placeholder="Mensaje" autofocus autocomplete="off">
+            </div>
+            <div class="control">
+              <button class="button is-info">
+                Send
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div id="map"></div>
     </div>
   </script>
 
   <script id="message-template" type="text/template">
-    <li class="message">
-      <div class="message__title">
-        <h4>{{from}}</h4>
-        <span>{{createdAt}}</span>
-      </div>
-      <div class="message__body">
-        <p>{{text}}</p>
-      </div>
+    <li class="chat__line">
+      <span>[[createdAt]] [[from]] [[text]]</span>
     </li>
   </script>
 
-  <script id="location-message-template" type="text/template">
-    <li class="message">
-      <div class="message__title">
-        <h4>{{from}}</h4>
-        <span>{{createdAt}}</span>
-      </div>
-      <div class="message__body">
-        <p>
-          <a href="{{url}}" target="_blank">My current location</a>
-        </p>
-      </div>
-    </li>
+  <script id="marker" type="text/template">
+    <div class="marker"><span>[[from]]</span></div>
   </script>
 
   <script src="/socket.io/socket.io.js"></script>
+  <script src='https://api.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.js'></script>
   <script src="/js/vue.min.js" type="text/javascript"></script>  
   <script src="/js/vue-router.js" type="text/javascript"></script>  
   <script src="/js/vue-resource.min.js" type="text/javascript"></script> 
@@ -137,7 +131,6 @@
   <script src="/js/libs/jquery-3.1.0.min.js"></script>
   <script src="/js/libs/moment.js"></script>
   <script src="/js/libs/mustache.js"></script>  
-  <script src="/js/libs/deparam.js"></script>  
   <script src="/js/routes.js" type="text/javascript"></script>  
 
 </body>
