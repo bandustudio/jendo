@@ -16,8 +16,6 @@ var io = socketIO(server);
 var users = new Users();
 
 io.on('connection', (socket) => {
-  console.log('New user connected');
-
   socket.on('join', (params, callback) => {
 
     if (!isRealString(params.name) || !isRealString(params.room)) {
@@ -53,7 +51,6 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     var user = users.removeUser(socket.id);
-
     if (user) {
       io.to(user.room).emit('updateUserList', users.getUserList(user.room));
       io.to(user.room).emit('newMessage', generateMessage('Bot', `${user.name} ha abandonado la conversación.`));

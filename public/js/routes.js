@@ -9,7 +9,6 @@ function createRandomString( length ) {
     return str.substr( 0, length );
 }
 
-
 function str2hex(string){
     var str = '';
     for(var i = 0; i < string.length; i++) {
@@ -100,16 +99,27 @@ const Chat = {
 	name:'chat',
 	mounted : function(){
 		var socket = io();
-		var chat = JSON.parse(localStorage.getItem('chat'));
-		if(!chat) chat = {room:createRandomString(6),name:createRandomString(6)};
-		localStorage.setItem("chat",JSON.stringify(chat));
+		var chat = JSON.parse(localStorage.getItem('chat')) || {room:null,name:null};
+		var room = this.$route.params.room || document.querySelector("html").getAttribute("room");
+		var name = this.$route.params.name || chat.name;
 		var self = this;
+
+		if(!name) {
+			var $name = prompt("Ingresa tu nombre","Usuario");
+			if ($name == null || $name.trim() == "") {
+				alert("Debes ingresar un nombre")
+			} else {
+				name = $name;
+			}
+		}
+
+		localStorage.setItem("chat",JSON.stringify({room:room,name:name}));
 
 		/* socket */
 
 		socket.on('connect', function () {
-		  var params = JSON.parse(localStorage.getItem('chat'))
-		  socket.emit('join', params, function (err) {
+
+		  socket.emit('join', chat, function (err) {
 		    if (err) {
 		      alert(err);
 		      window.location.href = '/';
@@ -134,7 +144,7 @@ const Chat = {
 		});
 
 		socket.on('newMessage', function (message) {
-		  var formattedTime = moment(message.createdAt).format('h:mm a');
+		  var formattedTime = moment(message.createdAt).format('HH:mm');
 		  var template = jQuery('#message-template').html();
 		  var html = Mustache.render(template, {
 		    text: message.text,
