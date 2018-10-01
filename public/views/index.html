@@ -98,10 +98,10 @@
         <form id="message-form" class="field is-horizontal">
           <div class="field has-addons">
             <div class="controls">
-              <input class="input" type="text" name="message" placeholder="Mensaje" autofocus autocomplete="off">
+              <input class="input is-rounded" type="text" name="message" placeholder="Mensaje" autofocus autocomplete="off">
             </div>
             <div class="control">
-              <button class="button is-info">
+              <button class="button is-success is-rounded">
                 <span class="icon has-text-white">
                   <i class="fa fa-send"></i>
                 </span>
@@ -129,7 +129,11 @@
 
   <script id="message-template" type="text/template">
     <li class="chat__line">
-      <span>[[createdAt]] [[from]] [[text]]</span>
+    {{#from}}
+      <strong>[[from]]</strong><br>
+    {{/from}}
+      <span>[[text]]</span>
+      <small><em>[[createdAt]]hs</em></small> 
     </li>
   </script>
 

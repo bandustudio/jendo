@@ -27,8 +27,8 @@ io.on('connection', (socket) => {
     users.addUser(socket.id, params.name, params.room);
 
     io.to(params.room).emit('updateUserList', users.getUserList(params.room));
-    socket.emit('newMessage', generateMessage('Bot', 'Bienvenido'));
-    socket.broadcast.to(params.room).emit('newMessage', generateMessage('Bot', `${params.name} se ha sumado a la conversación.`));
+    socket.emit('newMessage', generateMessage(null, 'Bienvenido'));
+    socket.broadcast.to(params.room).emit('newMessage', generateMessage(null, `${params.name} se ha sumado a la conversación.`));
     callback();
   });
 
@@ -53,7 +53,7 @@ io.on('connection', (socket) => {
     var user = users.removeUser(socket.id);
     if (user) {
       io.to(user.room).emit('updateUserList', users.getUserList(user.room));
-      io.to(user.room).emit('newMessage', generateMessage('Bot', `${user.name} ha abandonado la conversación.`));
+      io.to(user.room).emit('newMessage', generateMessage(null, `${user.name} ha abandonado la conversación.`));
     }
   });
 });

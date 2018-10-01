@@ -34,6 +34,10 @@ class Users {
     var users = this.users.filter((user) => user.room === room);
     var namesArray = users.map((user) => user.name);
 
+    namesArray = namesArray.filter(function(elem, pos) {
+        return namesArray.indexOf(elem) == pos;
+    })
+
     return namesArray;
   }
 }

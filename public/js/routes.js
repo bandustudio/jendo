@@ -3,6 +3,40 @@ const mapbox = {
 	style: 'mapbox://styles/mapbox/basic-v8'
 }
 
+function randNick() {
+
+	const firsts = [
+		'Nube',
+		'Cielo',
+		'Toro',
+		'La Vaca',
+		'Tigre',
+		'Zorro',
+		'Pájaro',
+		'Lago',
+		'Laguna'
+	];
+
+	const lasts = [
+		'Verde',
+		'Alegre',
+		'Alejado',
+		'Fortuito',
+		'Ruidoso',
+		'Veloz',
+		'Sorprendido',
+		'Manzana',
+		'Manzana',
+	];
+
+	var first = firsts[Math.floor(Math.random()*firsts.length)];
+	var last = lasts[Math.floor(Math.random()*lasts.length)];
+
+	return `${first} ${last}`;
+	//return [first,last].join(' ');
+}
+
+
 function createRandomString( length ) {
     var str = "";
     for ( ; str.length < length; str += Math.random().toString( 36 ).substr( 2 ) );
@@ -74,8 +108,7 @@ const Join = {
 			if ($room == null || $room.trim() == "") {
 				alert("Debes ingresar un identificador válido")
 			} else {
-
-				var $name = prompt("Ingresa tu nombre","Usuario");
+				var $name = prompt("Ingresa tu nombre",randNick());
 
 				if ($name == null || $name.trim() == "") {
 					alert("Debes ingresar un nombre")
@@ -105,7 +138,7 @@ const Chat = {
 		var self = this;
 
 		if(!name) {
-			var $name = prompt("Ingresa tu nombre","Usuario");
+			var $name = prompt("Ingresa tu nombre",randNick());
 			if ($name == null || $name.trim() == "") {
 				alert("Debes ingresar un nombre")
 			} else {
@@ -113,7 +146,8 @@ const Chat = {
 			}
 		}
 
-		localStorage.setItem("chat",JSON.stringify({room:room,name:name}));
+		const store = {room:room,name:name};
+		localStorage.setItem("chat",JSON.stringify(store));
 
 		/* socket */
 

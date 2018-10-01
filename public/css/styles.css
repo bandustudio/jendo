@@ -31,11 +31,19 @@ body {
   	/*display: none;*/
 }
 
+/* bulma hacks */
+
+.select:not(.is-multiple):not(.is-loading)::after, .navbar-link::after {
+	top: 60%;
+}
+
+
 #menu {
 	position: absolute;
+	top: 0;
 	right: 0;
 	z-index: 10;
-	padding: 10px 15px;
+	padding: 15px;
 }
 
 #menu label {
@@ -63,7 +71,15 @@ body {
 }
 
 .chat__input .button {
-	min-width: 22px;
+	padding-left: 1em;
+	padding-right: 1.5em;
+	border-color: #22c65b;
+	box-shadow: 0 0 0 0.125em #6eb486;
+}
+
+.chat__input .input {
+	padding-left: 1.5em;
+	padding-right: 1em;
 }
 
 .chat__users {
@@ -76,12 +92,55 @@ body {
 	top:3em;
 }
 
+.chat__line { 
+	position: relative; 
+	background: white; 
+	padding: 0.7em 1.2em;
+	border-radius: .4em; 
+	box-shadow: 0 0 0 0.125em #6eb486;	
+	max-width: 250px;
+} 
+
+.chat__line + .chat__line {
+	margin-top: 0.9em!important;
+}
+
+.chat__line:after { 
+	content: ''; 
+	position: absolute; 
+	right: 0; 
+	top: 50%; 
+	width: 0; 
+	height: 0; 
+	border: 1.031em solid transparent; 
+	border-left-color: white; 
+	border-right: 0; 
+	border-top: 0; 
+	margin-top: -0.516em; 
+	margin-right: -1.031em; 
+}
+
+.chat__line.me:after { 
+	content: ''; 
+	position: absolute; 
+	left: 0; 
+	top: 50%; 
+	width: 0; 
+	height: 0; 
+	border: 1.031em solid transparent; 
+	border-right-color: #00aabb; 
+	border-left: 0; 
+	border-top: 0; 
+	margin-top: -0.516em; 
+	margin-left: -1.031em; 
+}
+
 .chat__users #users {
 	display: inline-block;
 }
 
 .chat__users #users ul {
-	padding-right: 5px;
+	padding-right: 15px;
 	display: inline-block;
 	width: 100%;
 	list-style: none;
