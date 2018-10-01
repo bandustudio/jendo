@@ -123,7 +123,7 @@
             <option value="satellite">Satélite</option>
           </select>
         </div>
-      </div>       
+      </div>
     </div>
   </script>
 
@@ -134,7 +134,15 @@
   </script>
 
   <script id="marker" type="text/template">
-    <div class="marker"><span>[[from]]</span></div>
+    <div class="marker" style="background-color:[[color]];"><span>[[from]]</span></div>
+  </script>
+  
+  <script id="share" type="text/template">
+    <div class="sharetools">
+        <a href="https://twitter.com/share?url=https://jendo.glitch.me/[[room]]&via=overlemonsoft&text=¡Estoy en viaje! Mirá mi posición en tiempo real." target="_blank"><span class="fadeInLeft fa fa-twitter"></span></a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https://jendo.glitch.me/[[room]]&t=¡Estoy en viaje! Mirá mi posición en tiempo real." target="_blank"><span class="fadeInLeft1 fa fa-facebook"></span></a>
+        <a class="is-hidden-desktop" href="whatsapp://send?text=¡Estoy en viaje! Mirá mi posición en tiempo real. https://jendo.glitch.me/[[room]]" target="_blank"><span class="fadeInLeft2 fa fa-whatsapp"></span></a>
+    </div>
   </script>
 
   <script src="/socket.io/socket.io.js"></script>

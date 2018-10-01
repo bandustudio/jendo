@@ -4,10 +4,39 @@ const mapbox = {
 }
 
 function createRandomString( length ) {
-    
     var str = "";
     for ( ; str.length < length; str += Math.random().toString( 36 ).substr( 2 ) );
     return str.substr( 0, length );
+}
+
+
+function str2hex(string){
+    var str = '';
+    for(var i = 0; i < string.length; i++) {
+        str += string[i].charCodeAt(0).toString(16);
+    }
+	if(str.length > 6 ){
+		str = str.substr(str.length - 6);
+	} else if(str.length < 6){
+		str+= hexGenerator(str.length - 6);
+	}
+	return str;
+}
+
+function randomHex() {
+	var hexNumbers = [0,1,2,3,4,5,6,7,8,9,'A','B','C','D','E','F'];
+	// picking a random item of the array
+  	return hexNumbers[Math.floor(Math.random() * hexNumbers.length)];
+}
+
+// Genarates a Random Hex color
+function hexGenerator(len) {
+    hexValue = ['#'];
+    for (var i = 0; i < len; i += 1) {
+        hexValue.push(randomHex());
+    }
+
+    return hexValue.join('');
 }
 
 function scrollToBottom () {
@@ -107,7 +136,6 @@ const Chat = {
 		socket.on('newMessage', function (message) {
 		  var formattedTime = moment(message.createdAt).format('h:mm a');
 		  var template = jQuery('#message-template').html();
-
 		  var html = Mustache.render(template, {
 		    text: message.text,
 		    from: message.from,
@@ -119,12 +147,13 @@ const Chat = {
 		});
 
 		socket.on('newLocationMessage', function (message) {
-			console.log(message);
 		    if(!self.markers[message.from]){
 		        var el = document.createElement('div');
 		        var template = jQuery('#marker').html();
+		        var color = self.colors[$('#users li').length-1];
 				var html = Mustache.render(template, {
-				    from: message.from
+				    from: message.from,
+				    color: color
 				});		        
 				el.innerHTML = html
 		        self.markers[message.from] = new mapboxgl.Marker(el)
@@ -155,6 +184,14 @@ const Chat = {
 
 			self.initLayers();        
         },1);
+
+        setTimeout(function(){
+		  var template = jQuery('#share').html();
+		  var html = Mustache.render(template, {
+		    room: chat.room
+		  });
+		  jQuery('.chat').append(html);
+        },5000);
 
 	  	if (!navigator.geolocation) {
 	    	alert('Geolocation not supported by your browser.');
@@ -234,7 +271,8 @@ const Chat = {
 	data: function() {
 		return{
 		  	map:null,
-		  	markers:[]
+		  	markers:[],
+		  	colors:["#fc0d1b","#46e166","#583470","#f313b5","#1369f3","#cdf313","#f39d13"]
 		}
 	}
 }
