@@ -1,39 +1,41 @@
 <!DOCTYPE html>
-<html lang="es" room="{{room}}">
+<html lang='es' room='{{room}}'>
 <head>
-  <meta charset="utf-8">
+  <meta charset='utf-8'>
   <title>Jendo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+  <meta name='viewport' content='width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1'>
   <link href='https://api.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.css' rel='stylesheet' />
-  <link rel="stylesheet" href="/css/gibson.css">
-  <link rel="stylesheet" href="/css/bulma.css">  
-  <link rel="stylesheet" href="/css/styles.css">
+  <link rel='stylesheet' href='/css/gibson.css'>
+  <link rel='stylesheet' href='/css/bulma.css'>  
+  <link rel='stylesheet' href='/css/styles.css'>
   <link rel='stylesheet' href='/css/font-awesome.min.css'>
-  <link rel="stylesheet" href="/css/swiper.min.css">
+  <link rel='stylesheet' href='/css/swiper.min.css'>
 </head>
 <body>
-  <div class="swiper-container swiper-container-m" id="app">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide menu hidden-loading">
+  <div class='swiper-container swiper-container-m' id='app'>
+    <div class='swiper-wrapper'>
+      <div class='swiper-slide menu hidden-loading'>
         <ul>
-          <li><a href="/" class="has-text-white">Jendo</a></li>
-          <li><a href="/{{room}}" class="has-text-white">Crear</a></li>
-          <li><a href="/join" class="has-text-white">Unirse</a></li>
+          <li><a href='/' class='has-text-white'>Jendo</a></li>
+          <li><a href='/{{room}}' class='has-text-white'>Crear conversación</a></li>
+          <li><a href='/security' class='has-text-white'>Seguridad</a></li>
+          <li><a href='/terms' class='has-text-white'>Términos y Condiciones</a></li>
+          <li><a href='/contact' class='has-text-white'>Contacto</a></li>
         </ul>
       </div>
-      <div class="swiper-slide content">
-        <div class="menu-button hidden-loading">
-          <div class="bar"></div>
-          <div class="bar"></div>
-          <div class="bar"></div>
-          <span class="logo">Jendo</span>
+      <div class='swiper-slide content'>
+        <div class='menu-button hidden-loading'>
+          <div class='bar'></div>
+          <div class='bar'></div>
+          <div class='bar'></div>
+          <span class='logo'>Jendo</span>
         </div>
         
-        <keep-alive exlcude="chat">
-          <router-view :key="$route.fullPath">
-            <div class="container-spinner">
-              <div class="loaders">
-                <svg class="spinner"><circle cx="20" cy="20" r="18"></circle></svg>
+        <keep-alive exlcude='chat'>
+          <router-view :key='$route.fullPath'>
+            <div class='container-spinner'>
+              <div class='loaders'>
+                <svg class='spinner'><circle cx='20' cy='20' r='18'></circle></svg>
               </div>
             </div>        
           </router-view>
@@ -42,89 +44,205 @@
     </div>
   </div>
 
-  <script id="splash" type="text/x-template">
-    <div class="swiper-container swiper-container-v">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <div class="has-text-dark"> 
-                <h3>Invitá ahora a tus amigos 🚢</h3>
-                <a href="/{{room}}" class="button is-medium is-danger">Crear conversación</a>
-              </div>
-            </div>
-            <div class="swiper-slide">
-              <h3>Invitá ahora a tus amigos 🤣</h3>
-            </div>
-            <div class="swiper-slide">
-              <h3>Invitá ahora a tus amigos 🚻</h3>
-            </div>
-            <div class="swiper-slide">
-              <h3>Invitá ahora a tus amigos 🛀</h3>
-            </div>
-            <div class="swiper-slide">
-              <h3>Especialmente diseñado para<br>vos y las personas en que<br>confiás. 🚲</h3>
-            </div>
+  <script id='splash' type='text/x-template'>
+    <div class='swiper-container swiper-container-v'>
+      <div class='swiper-wrapper'>
+        <div class='swiper-slide'>
+          <div class='has-text has-text-dark'> 
+            <h4>Invitá ahora a tus amigos 🚢</h4>
+            <a href='/{{room}}' class='button is-medium is-danger'>Crear conversación</a>
+          </div>
         </div>
-        <!-- Add Pagination -->
-        <div class="swiper-pagination"></div>
+        <div class='swiper-slide'>
+          <div class='has-text has-text-dark'> 
+            <h4>Especialmente diseñado para<br>vos y las personas en que<br>confiás. 🚲</h4>
+            <a href='/{{room}}' class='button is-medium is-danger'>Crear conversación</a>
+          </div>
+        </div>
+      </div>
+      <!-- Add Pagination -->
+      <div class='swiper-pagination'></div>
     </div>
   </script>
 
-  <script id="join" type="text/x-template">
-    <div class="swiper-container swiper-container-v">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <div class="has-text-dark"> 
-                <h3>Unete a la conversación ahora 🤣</h3>
-                <a href="/{{room}}" class="button is-medium is-danger">Crear grupo</a>
+  <script id='join' type='text/x-template'>
+    <div class='swiper-container swiper-container-v'>
+        <div class='swiper-wrapper'>
+            <div class='swiper-slide'>
+              <div class='has-text-dark'> 
+                <h4>Unete a la conversación ahora 🤣</h4>
+                <a href='/{{room}}' class='button is-medium is-danger'>Crear grupo</a>
               </div>
             </div>
         </div>
         <!-- Add Pagination -->
-        <div class="swiper-pagination"></div>
+        <div class='swiper-pagination'></div>
     </div>  
   </script>
 
-  <script id="terms" type="text/x-template">
-    <div class="content">
-      <h1>Términos y condiciones</h1>
-
+  <script id='terms' type='text/x-template'>
+    <div class='swiper-container swiper-container-v'>
+      <div class='swiper-wrapper'>
+        <div class='swiper-slide'>
+          <div class='has-text has-text-dark'>
+            <h4>Términos y Condiciones de uso</h4>
+            <p>A través de jendo.glitch.me (en adelante, el ”Sitio y/o Jendo”), toda persona podrá disponer de una plataforma para crear conversaciones e intercambiar texto y archivos sin requerimentos previos de registro o código de acceso.</p>
+          </div>
+        </div>
+        <div class='swiper-slide'>
+          <div class='has-text has-text-dark'>
+            <h4>Términos y Condiciones de uso</h4>
+            <p>1. Toda persona que utilice Jendo (en adelante, “Usuario”) acepta sin condicionamientos que sus datos privados no serán registrados en ninguna base de datos, siendo Jendo una plataforma que proporciona un espacio digial exclusivo para el intercambio punto a punto. Si Ud. no está de acuerdo con alguno de los Términos de Uso, no utilice este Sitio. Se deja expresamente aclarado que los presentes Términos de Uso tienen carácter informativo. Es responsabilidad de los Usuarios informarse y/o consultar periódicamente los T&C o Politicas de Privacidad.</p>
+          </div>
+        </div>
+        <div class='swiper-slide'>
+          <div class='has-text has-text-dark'>
+            <h4>Términos y Condiciones de uso</h4>
+            <p>2. Jendo se reserva el derecho, a su sola discreción, de modificar, alterar o de otra manera actualizar Jendo y/o estos Términos de Uso en cualquier momento. Las modificaciones entrarán en vigencia desde el momento que se indique; en su defecto, se entenderá que su aplicación es inmediata. Usando este Sitio después dichas modificaciones, usted acepta estar sujeto a dichas modificaciones, alteraciones o actualizaciones de los Términos y Condiciones de Uso, sin derecho a efectuar reclamo alguno con relación a ello.</p>
+          </div>
+        </div>
+        <div class='swiper-slide'>
+          <div class='has-text has-text-dark'>
+            <h4>Términos y Condiciones de uso</h4>
+            <p>3. Condiciones de acceso y utilización dJendo:</p>
+            <p>3.1. La utilización de cualquier Servicio dJendo atribuye la condición de Usuario del mismo.</p>
+            <p>3.2. El acceso y utilización dJendo no exige la previa suscripción o registro del Usuario.</p>
+            <p>3.3. Será responsabilidad del usuario no compartir sus dispositivos con extraños.</p>
+            <p>3.4 No realizar cualquier acción que imponga una carga desproporcionada o desmesurada sobre la infraestructura de este Sitio.</p>
+            <p>3.5 Jendo no será responsable por los daños y perjuicios causados, incluyendo caso fortuito y fuerza mayor, que se produjeran a los equipos, instalaciones o personal del Usuario.</p>
+          </div>                        
+        </div>
+        <div class='swiper-slide'>
+          <div class='has-text has-text-dark'>
+            <h4>Términos y Condiciones de uso</h4>
+            <p>Presiona para aceptar los términos y condiciones-</p>
+            <a href='#' class='button is-medium is-danger'>Acepto los Términos y Condiciones</a>
+          </div>          
+        </div>
+      </div>
+      <!-- Add Pagination -->
+      <div class='swiper-pagination'></div>
     </div>
   </script>
 
-  <script id="security" type="text/x-template">
-    <div class="content">
-      <h1>Seguridad</h1>
-      
-    </div>  
+  <script id='security' type='text/x-template'>
+    <div class='swiper-container swiper-container-v'>
+      <div class='swiper-wrapper'>
+        <div class='swiper-slide'>
+          <div class='has-text has-text-dark'>
+            <h4>Seguridad de Jendo</h4>
+            <p>A través de Jendo podés disponer de una plataforma digital para crear conversaciones e intercambiar texto y archivos sin requerimentos previos de registro o código de acceso. Jendo es una plataforma que funciona de enlace entre tus amigos, también es libre y gratuita.</p>
+          </div>
+        </div>
+        <div class='swiper-slide'>
+          <div class='has-text has-text-dark'>
+            <h4>Seguridad de Jendo</h4>
+            <p>1. Tus datos no serán guardados solo son enviados. Esto quiere decir que si interactuas en una conversación cuyo único usuario eres tu nadie leerá tus mensajes y al no ser guardados se perderán, para siempre! 😨</p>
+          </div>
+        </div>
+        <div class='swiper-slide'>
+          <div class='has-text has-text-dark'>
+            <h4>Seguridad de Jendo</h4>
+            <p>2. Si bien la probabilidad es prácticamente insignificante las conversaciones podrían en teoría ser accedidas por bots o personas ajenas a la conversación de manera aleatoria. Si esto llegase a suceder la lista de usuario se actualizará e informará a todos los participantes de dicha conversación. </p>
+          </div>
+        </div>
+        <div class='swiper-slide'>
+          <div class='has-text has-text-dark'>
+            <h4>Haz un uso seguro de Jendo</h4>
+            <p>3. Considerando que la plataforma puede otorgar la geolocalización del dispositivo es recomendable solo iniciar conversaciones con personas que uno conozca previamente y tenga confianza. Una vez cerrada la aplicación cesará el envío de cualquier dato a través de la plataforma.</p>
+          </div>
+        </div>
+      </div>
+      <!-- Add Pagination -->
+      <div class='swiper-pagination'></div>      
+    </div>
   </script>
 
-  <script id="contact" type="text/x-template">
-    <div class="content">
-      <h1>Contacto</h1>
-      
-    </div>  
-  </script>
-
-  <script id="chat" type="text/x-template">
-    <div class="chat">
-      <div class="chat__users">
-        <div id="users"></div>
-      </div>
-
-      <div class="chat__messages">
-        <ul id="messages"></ul>
-      </div>
-
-      <div class="chat__input">
-        <form id="message-form" class="field is-horizontal">
-          <div class="field has-addons">
-            <div class="controls">
-              <input class="input is-rounded" type="text" name="message" placeholder="Mensaje" autofocus autocomplete="off">
+  <script id='contact' type='text/x-template'>
+    <div class='swiper-container swiper-container-v'>
+      <div class='swiper-wrapper'>
+        <div class='swiper-slide'>
+          <div class='container has-text'>
+            <div class='field '>
+              <div class='field-label'></div>
+              <div class='field-body'>
+                <div class='field'>
+                  <p class='control is-expanded'>
+                    <input class='input' type='email' placeholder='Tu email' required>
+                  </p>
+                </div>
+              </div>
             </div>
-            <div class="control">
-              <button class="button is-success is-rounded">
-                <span class="icon has-text-white">
-                  <i class="fa fa-send"></i>
+
+            <div class='field '>
+              <div class='field-body'>
+                <div class='field is-narrow'>
+                  <div class='control'>
+                    <div class='select is-fullwidth'>
+                      <select>
+                        <option>Área de la consulta</option>
+                        <option>Desarrollo</option>
+                        <option>Marketing</option>
+                        <option>Dirección</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>  
+
+            <div class='field '>
+              <div class='field-body'>
+                <div class='field'>
+                  <div class='control'>
+                    <textarea class='textarea' placeholder='Exlica brevemente como podemos ayudarte.'></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class='field '>
+              <div class='field-label'>
+                <!-- Left empty for spacing -->
+              </div>
+              <div class='field-body'>
+                <div class='field'>
+                  <div class='control'>
+                    <button class='button is-primary'>
+                      Enviar consulta 
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Add Pagination -->
+      <div class='swiper-pagination'></div>      
+    </div>
+  </script>
+
+  <script id='chat' type='text/x-template'>
+    <div class='chat'>
+      <div class='chat__users'>
+        <div id='users'></div>
+      </div>
+
+      <div class='chat__messages'>
+        <ul id='messages'></ul>
+      </div>
+
+      <div class='chat__input'>
+        <form id='message-form' class='field '>
+          <div class='field has-addons'>
+            <div class='controls'>
+              <input class='input is-rounded' type='text' name='message' placeholder='Mensaje' autofocus autocomplete='off'>
+            </div>
+            <div class='control'>
+              <button class='button is-success is-rounded'>
+                <span class='icon has-text-white'>
+                  <i class='fa fa-send'></i>
                 </span>
               </button>
             </div>
@@ -132,52 +250,52 @@
         </form>
       </div>
 
-      <div id="map"></div>
+      <div id='map'></div>
       <div id='menu'>
-        <div class="select is-small is-rounded">
-          <select id="styles">
-            <option value="basic">Básico</option>
-            <option value="streets">Calles</option>
-            <option value="bright">Luminoso</option>
-            <option value="light">Claro</option>
-            <option value="dark">Oscuro</option>
-            <option value="satellite">Satélite</option>
+        <div class='select is-small is-rounded'>
+          <select id='styles'>
+            <option value='basic'>Básico</option>
+            <option value='streets'>Calles</option>
+            <option value='bright'>Luminoso</option>
+            <option value='light'>Claro</option>
+            <option value='dark'>Oscuro</option>
+            <option value='satellite'>Satélite</option>
           </select>
         </div>
       </div>
     </div>
   </script>
 
-  <script id="message-template" type="text/template">
-    <li class="chat__line [[cls]]">
+  <script id='message-template' type='text/template'>
+    <li class='chat__line [[cls]]'>
       <strong>[[from]]</strong>  
       <span>[[text]]</span>      
-      <small class="time"><em>[[createdAt]]</em></small>
+      <small class='time'><em>[[createdAt]]</em></small>
     </li>
   </script>
 
-  <script id="marker" type="text/template">
-    <div class="marker" style="background-color:[[color]];"><span>[[id]]</span></div>
+  <script id='marker' type='text/template'>
+    <div class='marker' style='background-color:[[color]];'><span>[[id]]</span></div>
   </script>
   
-  <script id="share" type="text/template">
-    <div class="sharetools">
-        <a href="https://twitter.com/share?url=https://jendo.glitch.me/[[room]]&via=overlemonsoft&text=¡Estoy en viaje! Mirá mi posición en tiempo real." target="_blank"><span class="fadeInLeft fa fa-twitter"></span></a>
-        <a href="https://www.facebook.com/sharer/sharer.php?u=https://jendo.glitch.me/[[room]]&t=¡Estoy en viaje! Mirá mi posición en tiempo real." target="_blank"><span class="fadeInLeft1 fa fa-facebook"></span></a>
-        <a class="is-hidden-desktop" href="whatsapp://send?text=¡Estoy en viaje! Mirá mi posición en tiempo real. https://jendo.glitch.me/[[room]]" target="_blank"><span class="fadeInLeft2 fa fa-whatsapp"></span></a>
+  <script id='share' type='text/template'>
+    <div class='sharetools'>
+        <a href='https://twitter.com/share?url=https://jendo.glitch.me/[[room]]&via=overlemonsoft&text=¡Estoy en viaje! Mirá mi posición en tiempo real.' target='_blank'><span class='fadeInLeft fa fa-twitter'></span></a>
+        <a href='https://www.facebook.com/sharer/sharer.php?u=https://jendo.glitch.me/[[room]]&t=¡Estoy en viaje! Mirá mi posición en tiempo real.' target='_blank'><span class='fadeInLeft1 fa fa-facebook'></span></a>
+        <a class='is-hidden-desktop' href='whatsapp://send?text=¡Estoy en viaje! Mirá mi posición en tiempo real. https://jendo.glitch.me/[[room]]' target='_blank'><span class='fadeInLeft2 fa fa-whatsapp'></span></a>
     </div>
   </script>
 
-  <script src="/socket.io/socket.io.js"></script>
+  <script src='/socket.io/socket.io.js'></script>
   <script src='https://api.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.js'></script>
-  <script src="/js/vue.min.js" type="text/javascript"></script>  
-  <script src="/js/vue-router.js" type="text/javascript"></script>  
-  <script src="/js/vue-resource.min.js" type="text/javascript"></script> 
-  <script src="/js/libs/swiper.min.js"></script>
-  <script src="/js/libs/jquery-3.1.0.min.js"></script>
-  <script src="/js/libs/moment.js"></script>
-  <script src="/js/libs/mustache.js"></script>  
-  <script src="/js/routes.js" type="text/javascript"></script>  
+  <script src='/js/vue.min.js' type='text/javascript'></script>  
+  <script src='/js/vue-router.js' type='text/javascript'></script>  
+  <script src='/js/vue-resource.min.js' type='text/javascript'></script> 
+  <script src='/js/libs/swiper.min.js'></script>
+  <script src='/js/libs/jquery-3.1.0.min.js'></script>
+  <script src='/js/libs/moment.js'></script>
+  <script src='/js/libs/mustache.js'></script>  
+  <script src='/js/routes.js' type='text/javascript'></script>  
 
 </body>
 </html>

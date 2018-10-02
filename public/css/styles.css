@@ -411,6 +411,13 @@ body {
 	-webkit-align-items: center;
 	align-items: center;
 }
+
+.has-text {
+	margin: 0 auto;
+	max-width: 650px;
+	padding-left: 1.5em;
+	padding-right: 1.5em;
+}
 /*
 .swiper-container-v .swiper-slide {
 	background-repeat: no-repeat;
@@ -418,19 +425,19 @@ body {
 	background-size: cover;
 }*/
 .swiper-container-v .swiper-slide:nth-of-type(1){
-	background-image: url(/img/vector-flower-seamless-pattern-background.jpg);
+	background-image: url(/img/rosy-sky-watercolor.jpg);
 }
 .swiper-container-v .swiper-slide:nth-of-type(2){
-	background-image: url(/img/christchurch_wedding_photographer.jpg);
+	background-image: url(/img/ricepaper-hue-yellow.jpg);
 }
 .swiper-container-v .swiper-slide:nth-of-type(3){
-	background-image: url(/img/vector-damask-seamless-pattern-background-classical.jpg);
+	background-image: url(/img/ricepaper-hue-pink.jpg);
 }
 .swiper-container-v .swiper-slide:nth-of-type(4){
-	background-image: url(/img/pineapple-wallpaper-pattern.jpg);
+	background-image: url(/img/vellum-plain-yellow-tile.jpg);
 }
 .swiper-container-v .swiper-slide:nth-of-type(5){
-	background-image: url(/img/flower-pattern-wallpaper-pink-wild-flower-pattern-self-adhesive.jpg);
+	background-image: url(/img/ricepaper-hue-purple.jpg);
 }
 .swiper-container-v .swiper-slide:nth-of-type(6){
 	background-image: url(/img/800px_COLOURBOX20262058.jpg);
