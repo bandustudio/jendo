@@ -84,6 +84,27 @@
     </div>  
   </script>
 
+  <script id="terms" type="text/x-template">
+    <div class="content">
+      <h1>Términos y condiciones</h1>
+
+    </div>
+  </script>
+
+  <script id="security" type="text/x-template">
+    <div class="content">
+      <h1>Seguridad</h1>
+      
+    </div>  
+  </script>
+
+  <script id="contact" type="text/x-template">
+    <div class="content">
+      <h1>Contacto</h1>
+      
+    </div>  
+  </script>
+
   <script id="chat" type="text/x-template">
     <div class="chat">
       <div class="chat__users">
@@ -129,9 +150,7 @@
 
   <script id="message-template" type="text/template">
     <li class="chat__line">
-    {{#from}}
-      <strong>[[from]]</strong><br>
-    {{/from}}
+      <strong>[[from]]</strong>
       <span>[[text]]</span>
       <small><em>[[createdAt]]hs</em></small> 
     </li>

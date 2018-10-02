@@ -4,7 +4,6 @@ const mapbox = {
 }
 
 function randNick() {
-
 	const firsts = [
 		'Nube',
 		'Cielo',
@@ -19,14 +18,18 @@ function randNick() {
 
 	const lasts = [
 		'Verde',
+		'Azul',
+		'Amarillo',
+		'Blanco',
+		'Violeta',
 		'Alegre',
 		'Alejado',
 		'Fortuito',
 		'Ruidoso',
 		'Veloz',
-		'Sorprendido',
-		'Manzana',
-		'Manzana',
+		'Bravo',
+		'Sentado',
+		'Corriendo',
 	];
 
 	var first = firsts[Math.floor(Math.random()*firsts.length)];
@@ -95,35 +98,24 @@ const Splash = {
 	}
 }
 
-const Join = {
-	template: '#join',
+const Terms = {
+	template: '#terms',
 	mounted : function(){
-		var room = this.$route.params.room || localStorage.getItem('room');
-		var name = this.$route.params.name || localStorage.getItem('name');
-
-		if(!room && !name){
-			room = document.querySelector("html").getAttribute("room");
-			var $room = prompt("Ingresa tu identificador de salón para ingresar",room);
 		
-			if ($room == null || $room.trim() == "") {
-				alert("Debes ingresar un identificador válido")
-			} else {
-				var $name = prompt("Ingresa tu nombre",randNick());
+	}
+}
 
-				if ($name == null || $name.trim() == "") {
-					alert("Debes ingresar un nombre")
-				} else {
-					var chat = {
-						room: $room,
-						name: $name
-					};
-					localStorage.setItem("chat",JSON.stringify(chat));
-					this.$router.push('/' + $room);
-				}
-			}
-		} else {
-			this.$router.push('/' + room);
-		}
+const Security = {
+	template: '#security',
+	mounted : function(){
+		
+	}
+}
+
+const Contact = {
+	template: '#contact',
+	mounted : function(){
+		
 	}
 }
 
@@ -131,12 +123,20 @@ const Chat = {
 	template: '#chat',
 	name:'chat',
 	mounted : function(){
+
+		if(!this.$route.params.room){
+			alert("Debes ingresar al menos una identifición de conversación");
+			app.$router.push(document.querySelector("html").getAttribute("room"));
+			return;
+		}
+
 		var socket = io();
 		var chat = JSON.parse(localStorage.getItem('chat')) || {room:null,name:null};
-		var room = this.$route.params.room || document.querySelector("html").getAttribute("room");
+		var room = this.$route.params.room;
 		var name = this.$route.params.name || chat.name;
 		var self = this;
 
+		/* verify chat data */
 		if(!name) {
 			var $name = prompt("Ingresa tu nombre",randNick());
 			if ($name == null || $name.trim() == "") {
@@ -146,6 +146,7 @@ const Chat = {
 			}
 		}
 
+		/* store chat data */
 		const store = {room:room,name:name};
 		localStorage.setItem("chat",JSON.stringify(store));
 
@@ -155,39 +156,39 @@ const Chat = {
 
 		  socket.emit('join', chat, function (err) {
 		    if (err) {
-		      alert(err);
-		      window.location.href = '/';
+		      	alert(err);
+		      	window.location.href = '/';
 		    } else {
-		      console.log('No error');
-		    }
-		  });
+		      	console.log('No error');
+		    	}
+		  	});
 		});
 
 		socket.on('disconnect', function () {
-		  console.log('Disconnected from server');
+		  	console.log('Disconnected from server');
 		});
 
 		socket.on('updateUserList', function (users) {
-		  var ul = jQuery('<ul></ul>');
+			var ul = jQuery('<ul></ul>');
 
-		  users.forEach(function (user) {
-		    ul.append(jQuery('<li></li>').text(user));
-		  });
+			users.forEach(function (user) {
+				ul.append(jQuery('<li></li>').text(user));
+			});
 
-		  jQuery('#users').html(ul);
+			jQuery('#users').html(ul);
 		});
 
 		socket.on('newMessage', function (message) {
-		  var formattedTime = moment(message.createdAt).format('HH:mm');
-		  var template = jQuery('#message-template').html();
-		  var html = Mustache.render(template, {
-		    text: message.text,
-		    from: message.from,
-		    createdAt: formattedTime
-		  });
+			var formattedTime = moment(message.createdAt).format('HH:mm');
+			var template = jQuery('#message-template').html();
+			var html = Mustache.render(template, {
+				text: message.text,
+				from: message.from,
+				createdAt: formattedTime
+			});
 
-		  jQuery('#messages').append(html);
-		  scrollToBottom();
+			jQuery('#messages').append(html);
+			scrollToBottom();
 		});
 
 		socket.on('newLocationMessage', function (message) {
@@ -325,7 +326,9 @@ const router = new VueRouter({
   mode: 'history',
   routes: [
     {path: '/', component: Splash, meta : { title: 'Jendo' }},
-    {path: '/join/:room?/:name?', component: Join, meta : { title: 'Unete' }},
+    {path: '/terms', component: Terms, meta : { title: 'Términos y condiciones' }},
+    {path: '/security', component: Security, meta : { title: 'Seguridad' }},
+    {path: '/contact', component: Contact, meta : { title: 'Contacto' }},
     {path: '/:room/:name?', component: Chat, meta : { title: 'Jendo' }}
    ]
 });
