@@ -37,6 +37,9 @@ body {
 	top: 60%;
 }
 
+.logo {
+	color: #2C8DFB;
+}
 
 #menu {
 	position: absolute;
@@ -73,13 +76,14 @@ body {
 .chat__input .button {
 	padding-left: 1em;
 	padding-right: 1.5em;
-	border-color: #22c65b;
-	box-shadow: 0 0 0 0.125em #6eb486;
+	border: none;
 }
 
 .chat__input .input {
 	padding-left: 1.5em;
 	padding-right: 1em;
+	border: none;
+	box-shadow: none;
 }
 
 .chat__users {
@@ -95,9 +99,10 @@ body {
 .chat__line { 
 	position: relative; 
 	background: white; 
+	opacity: 0.8;
 	padding: 0.7em 1.2em;
 	border-radius: .4em; 
-	box-shadow: 0 0 0 0.125em #6eb486;	
+	box-shadow: 0 0 0.25em #666;	
 } 
 
 .chat__line + .chat__line {
@@ -108,7 +113,7 @@ body {
 	content: ''; 
 	position: absolute; 
 	right: 0; 
-	top: 50%; 
+	top: 33%; 
 	width: 0; 
 	height: 0; 
 	border: 1.031em solid transparent; 
@@ -119,21 +124,33 @@ body {
 	margin-right: -1.031em; 
 }
 
+.chat__line.me { 
+	background: #f1f1f1; 
+	box-shadow: 0 0 0.25em #999;
+} 
+
 .chat__line.me:after { 
 	content: ''; 
 	position: absolute; 
 	left: 0; 
-	top: 50%; 
+	top: 33%; 
 	width: 0; 
 	height: 0; 
 	border: 1.031em solid transparent; 
-	border-right-color: #00aabb; 
+	border-right-color: #f1f1f1; 
 	border-left: 0; 
 	border-top: 0; 
 	margin-top: -0.516em; 
 	margin-left: -1.031em; 
 }
 
+.chat__line .time { 
+	position: absolute;
+	bottom: 3px;
+	right: 8px;
+	color: #666;
+	font-size: 10px;
+}
 .chat__users #users {
 	display: inline-block;
 }
@@ -184,11 +201,13 @@ body {
 }
 
 .marker span {
+	text-transform: uppercase;
 	position: relative;
-	left: 25px;
+	left: 6px;
 	top: -1px;	
-	font-size: 12px;
-	font-weight: 500;
+	color: white;
+	font-size: 13px;
+	font-weight: 600;
 }
 
 /* swiper hacks */
@@ -307,7 +326,7 @@ body {
   color: white;
 }
 
-.hide {
+.hide, .hidden-loading {
   display: none;
 }
 
@@ -428,9 +447,6 @@ body {
 .swiper-container-v .swiper-slide:nth-of-type(10){
 	background-image: url(/img/95306105-floral-pattern-with-points-wallpaper-seamless-vector-background-blue-andwhite-ornament-.jpg);
 }
-
-
-
 
 .menu {
 	min-width: 100px;

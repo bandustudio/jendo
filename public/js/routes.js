@@ -147,6 +147,8 @@ const Chat = {
 		}
 
 		/* store chat data */
+		this.name = name;
+		this.room = room;
 		const store = {room:room,name:name};
 		localStorage.setItem("chat",JSON.stringify(store));
 
@@ -171,8 +173,14 @@ const Chat = {
 		socket.on('updateUserList', function (users) {
 			var ul = jQuery('<ul></ul>');
 
-			users.forEach(function (user) {
-				ul.append(jQuery('<li></li>').text(user));
+			users.forEach(function (user,i) {
+				const color = self.colors[i];
+
+				ul.append(jQuery('<li></li>')
+				.attr('color',color)
+				.attr('from',user)
+				.text(user)
+				.css('color',color));
 			});
 
 			jQuery('#users').html(ul);
@@ -183,7 +191,8 @@ const Chat = {
 			var template = jQuery('#message-template').html();
 			var html = Mustache.render(template, {
 				text: message.text,
-				from: message.from,
+				from:  (message.from === self.name ? null:message.from),
+				cls: (message.from === self.name ? 'me':''),
 				createdAt: formattedTime
 			});
 
@@ -192,28 +201,35 @@ const Chat = {
 		});
 
 		socket.on('newLocationMessage', function (message) {
+
+			var center = false;
+
 		    if(!self.markers[message.from]){
 		        var el = document.createElement('div');
 		        var template = jQuery('#marker').html();
-		        var color = self.colors[$('#users li').length-1];
+		        var color = $('#users li[from="'+message.from+'"]').attr('color');
 				var html = Mustache.render(template, {
+				    id: message.from.charAt(0),
 				    from: message.from,
 				    color: color
 				});		        
-				el.innerHTML = html
-		        self.markers[message.from] = new mapboxgl.Marker(el)
+				el.innerHTML = html;
+		        self.markers[message.from] = new mapboxgl.Marker(el);
+		        center = true;
 		    }
 
 		    self.markers[message.from].setLngLat([message.longitude,message.latitude])
 		    self.markers[message.from].addTo(self.map)
 		    $(self.markers[message.from].getElement()).removeClass('pulse').addClass('pulse')
 
-		    if(self.markers.length > 1){
-			    var bounds = new mapboxgl.LngLatBounds();
-			    bounds.extend([message.longitude,message.latitude]);
-			    self.map.fitBounds(bounds, { padding: 50 });
-			} else {
-				self.map.setCenter([message.longitude,message.latitude]);
+		    if(center){
+			    if(self.markers.length > 1){
+				    var bounds = new mapboxgl.LngLatBounds();
+				    bounds.extend([message.longitude,message.latitude]);
+				    self.map.fitBounds(bounds, { padding: 50 });
+				} else {
+					self.map.setCenter([message.longitude,message.latitude]);
+				}
 			}
 		});
 
@@ -224,7 +240,7 @@ const Chat = {
 	            container: 'map',
 	            center: [0,0],
 	            style:mapbox.style,
-	            zoom: 13
+	            zoom: 14
 	        });
 
 			self.initLayers();        
@@ -316,6 +332,8 @@ const Chat = {
 	data: function() {
 		return{
 		  	map:null,
+		  	name:null,
+		  	room:null,
 		  	markers:[],
 		  	colors:["#fc0d1b","#46e166","#583470","#f313b5","#1369f3","#cdf313","#f39d13"]
 		}
@@ -388,7 +406,8 @@ const app = new Vue({
 			    },
 			  }
 			});
-		},0)		
+		},0);
+		$('.hidden-loading').removeClass('hidden-loading');
 	} 
 }).$mount('#app');
 

@@ -14,7 +14,7 @@
 <body>
   <div class="swiper-container swiper-container-m" id="app">
     <div class="swiper-wrapper">
-      <div class="swiper-slide menu">
+      <div class="swiper-slide menu hidden-loading">
         <ul>
           <li><a href="/" class="has-text-white">Jendo</a></li>
           <li><a href="/{{room}}" class="has-text-white">Crear</a></li>
@@ -22,11 +22,11 @@
         </ul>
       </div>
       <div class="swiper-slide content">
-        <div class="menu-button">
+        <div class="menu-button hidden-loading">
           <div class="bar"></div>
           <div class="bar"></div>
           <div class="bar"></div>
-          <span class="has-text-info">Jendo</span>
+          <span class="logo">Jendo</span>
         </div>
         
         <keep-alive exlcude="chat">
@@ -149,15 +149,15 @@
   </script>
 
   <script id="message-template" type="text/template">
-    <li class="chat__line">
-      <strong>[[from]]</strong>
-      <span>[[text]]</span>
-      <small><em>[[createdAt]]hs</em></small> 
+    <li class="chat__line [[cls]]">
+      <strong>[[from]]</strong>  
+      <span>[[text]]</span>      
+      <small class="time"><em>[[createdAt]]</em></small>
     </li>
   </script>
 
   <script id="marker" type="text/template">
-    <div class="marker" style="background-color:[[color]];"><span>[[from]]</span></div>
+    <div class="marker" style="background-color:[[color]];"><span>[[id]]</span></div>
   </script>
   
   <script id="share" type="text/template">

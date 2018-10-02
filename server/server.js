@@ -27,7 +27,7 @@ io.on('connection', (socket) => {
     users.addUser(socket.id, params.name, params.room);
 
     io.to(params.room).emit('updateUserList', users.getUserList(params.room));
-    socket.emit('newMessage', generateMessage(null, 'Bienvenido'));
+    //socket.emit('newMessage', generateMessage(null, 'Bienvenido'));
     socket.broadcast.to(params.room).emit('newMessage', generateMessage(null, `${params.name} se ha sumado a la conversación.`));
     callback();
   });
