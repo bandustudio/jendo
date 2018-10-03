@@ -140,7 +140,8 @@ const Chat = {
 		if(!name) {
 			var $name = prompt("Ingresa tu nombre",randNick());
 			if ($name == null || $name.trim() == "") {
-				alert("Debes ingresar un nombre")
+				alert("Debes ingresar un nombre");
+				return app.$router.push('/');
 			} else {
 				name = $name;
 			}
@@ -156,7 +157,7 @@ const Chat = {
 
 		socket.on('connect', function () {
 
-		  socket.emit('join', chat, function (err) {
+		  socket.emit('join', store, function (err) {
 		    if (err) {
 		      	alert(err);
 		      	window.location.href = '/';

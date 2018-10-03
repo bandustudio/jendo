@@ -46,7 +46,7 @@ body {
 	top: 0;
 	right: 0;
 	z-index: 10;
-	padding: 15px;
+	padding: 10px;
 }
 
 #menu label {
@@ -67,7 +67,7 @@ body {
 .chat__input {
 	padding: 10px;
 	position: absolute;
-	z-index: 2;
+	z-index: 9;
 	bottom: 0;
 	left: 0;
 	right: 0;
@@ -198,13 +198,12 @@ body {
 	background-color: pink;
 	border: 2px solid white;
 	border-radius: 50%;
+	text-align: center;
 }
 
 .marker span {
 	text-transform: uppercase;
-	position: relative;
-	left: 6px;
-	top: -1px;	
+	text-align: center;
 	color: white;
 	font-size: 13px;
 	font-weight: 600;
