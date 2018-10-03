@@ -8,6 +8,12 @@ function getInitials(str){
 	return ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
 }
 
+function playAudio(audio) {
+	if(audio===undefined) audio = "message";
+    var audio = new Audio('/audio/' + audio + '.mp3');
+    audio.play();
+}
+
 function changename(){
 	var store = JSON.parse(localStorage.getItem('chat')) || {room:document.querySelector("html").getAttribute("room"),name:randNick()};
 	var $name = prompt("Ingresa tu nombre",store.name);
@@ -65,10 +71,10 @@ function hexGenerator(len) {
 }
 
 function scrollToBottom () {
-
 	var objDiv = $(".chat__messages");
 	var h = objDiv.get(0).scrollHeight;
 	objDiv.animate({scrollTop: h});
+	playAudio('submit');
 }
 
 const Splash = {
@@ -211,6 +217,9 @@ const Chat = {
 		    $(self.markers[message.from].getElement()).removeClass('pulse').addClass('pulse')
 
 		    if(connected != Object.keys(self.markers).length){
+		    	if(Object.keys(self.markers).length > connected){
+		    		playAudio('notification');
+		    	}
 			    if(Object.keys(self.markers).length > 1){
 				    var bounds = new mapboxgl.LngLatBounds();
 				    for(var i in self.markers){
