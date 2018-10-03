@@ -246,15 +246,15 @@
 
       <div class='chat__input'>
         <div class="field is-grouped">
-          <p class="control is-expanded">
-            <input class='input is-rounded' type='text' name='message' placeholder='Mensaje' autofocus autocomplete='off'>
-          </p>
           <p class="control">
             <button class='button is-info is-rounded' @click="toggleChat">
               <span class='icon has-text-white'>
                 <i class='fa fa-toggle-on'></i>
               </span>
             </button>
+          </p>
+          <p class="control is-expanded">
+            <input class='input is-rounded' type='text' name='message' placeholder='Mensaje' autofocus autocomplete='off'>
           </p>
           <p class="control">
             <button class='button is-success is-rounded' @click="sendMessage">
@@ -291,7 +291,7 @@
   </script>
 
   <script id='marker' type='text/template'>
-    <div class='marker' style='background-color:[[color]];'><span>[[id]]</span></div>
+    <div class='marker' style='background-color:[[color]];'><span>[[initials]]</span></div>
   </script>
   
   <script id='share' type='text/template'>

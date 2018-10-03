@@ -171,8 +171,9 @@ const Chat = {
 		        var el = document.createElement('div');
 		        var template = jQuery('#marker').html();
 		        var color = $('#users li[from="'+message.from+'"]').attr('color');
+				var initials = message.from.match(/\b\w/g) || [];
 				var html = Mustache.render(template, {
-				    id: message.from.charAt(0),
+				    initials: ((initials.shift() || '') + (initials.pop() || '')).toUpperCase(),
 				    from: message.from,
 				    color: color
 				});		        
@@ -193,7 +194,7 @@ const Chat = {
 				    }				    
 				    self.map.fitBounds(bounds, { padding: 100 });
 				} else {
-					console.log("set center")
+					self.map.setCenter([message.longitude,message.latitude]);
 				}
 			}
 		});
