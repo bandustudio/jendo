@@ -21,7 +21,6 @@ function changename(){
 	}
 }
 
-
 function randNick() {
 	const firsts = ['Nube','Cielo','Toro','La Vaca','Tigre','Zorro','Pájaro','Lago','Laguna'];
 	const lasts = ['Verde','Azul','Amarillo','Blanco','Violeta','Alegre','Alejado','Fortuito','Ruidoso','Veloz','Bravo','Sentado','Corriendo'];
@@ -263,6 +262,9 @@ const Chat = {
 			if(messageTextbox.val().trim()==''){
 				$('.chat__messages').toggle();
 			} else {
+				if($('.chat__messages').is(':hidden')){
+					$('.chat__messages').toggle();
+				}
 				this.socket.emit('createMessage', {
 					text: messageTextbox.val()
 				}, function () {
