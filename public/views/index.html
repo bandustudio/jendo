@@ -4,6 +4,22 @@
   <meta charset='utf-8'>
   <title>Jendo</title>
   <meta name='viewport' content='width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1'>
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta property="og:title" content="Jendo" />
+  <meta property="og:description" content="Plataforma de comunicación en tiempo real." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://jendo.glitch.me/images/jendo.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="600" />
+  <meta property="og:image:height" content="315" />
+  <meta property="og:url" content="https://jendo.glitch.me"/>
+  <link rel="apple-touch-icon" href="/apple-icon.png">
+  <link rel="icon" type="image/png" href="/android-icon.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="msapplication-TileColor" content="#ff006c">
+  <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ff006c">  
   <link href='https://api.mapbox.com/mapbox-gl-js/v0.47.0/mapbox-gl.css' rel='stylesheet' />
   <link rel='stylesheet' href='/css/gibson.css'>
   <link rel='stylesheet' href='/css/bulma.css'>  
@@ -49,7 +65,7 @@
       <div class='swiper-wrapper'>
         <div class='swiper-slide'>
           <div class='has-text has-text-dark'> 
-            <h4 class='has-text-dark'>Invitá ahora a tus amigos 🚢</h4>
+            <h4 class='has-text-dark'>Invitá a tus amigos 🚢</h4>
             <a href='/{{room}}' class='button is-medium is-danger'>Crear conversación</a>
           </div>
         </div>
@@ -70,7 +86,7 @@
         <div class='swiper-wrapper'>
             <div class='swiper-slide'>
               <div class='has-text-dark'> 
-                <h4 class='has-text-dark'>Unete a la conversación ahora 🤣</h4>
+                <h4 class='has-text-dark'>Unete a la conversación jendo 🤣</h4>
                 <a href='/{{room}}' class='button is-medium is-danger'>Crear grupo</a>
               </div>
             </div>
@@ -173,7 +189,6 @@
                 </div>
               </div>
             </div>
-
             <div class='field '>
               <div class='field-body'>
                 <div class='field is-narrow'>
@@ -189,8 +204,7 @@
                   </div>
                 </div>
               </div>
-            </div>  
-
+            </div>
             <div class='field '>
               <div class='field-body'>
                 <div class='field'>
@@ -200,7 +214,6 @@
                 </div>
               </div>
             </div>
-
             <div class='field '>
               <div class='field-label'>
                 <!-- Left empty for spacing -->
@@ -232,20 +245,25 @@
       </div>
 
       <div class='chat__input'>
-        <form id='message-form' class='field '>
-          <div class='field has-addons'>
-            <div class='controls'>
-              <input class='input is-rounded' type='text' name='message' placeholder='Mensaje' autofocus autocomplete='off'>
-            </div>
-            <div class='control'>
-              <button class='button is-success is-rounded'>
-                <span class='icon has-text-white'>
-                  <i class='fa fa-send'></i>
-                </span>
-              </button>
-            </div>
-          </div>
-        </form>
+        <div class="field is-grouped">
+          <p class="control is-expanded">
+            <input class='input is-rounded' type='text' name='message' placeholder='Mensaje' autofocus autocomplete='off'>
+          </p>
+          <p class="control">
+            <button class='button is-info is-rounded' @click="toggleChat">
+              <span class='icon has-text-white'>
+                <i class='fa fa-toggle-on'></i>
+              </span>
+            </button>
+          </p>
+          <p class="control">
+            <button class='button is-success is-rounded' @click="sendMessage">
+              <span class='icon has-text-white'>
+                <i class='fa fa-send'></i>
+              </span>
+            </button>
+          </p>
+        </div>
       </div>
 
       <div id='map'></div>
@@ -278,9 +296,15 @@
   
   <script id='share' type='text/template'>
     <div class='sharetools'>
-        <a href='https://twitter.com/share?url=https://jendo.glitch.me/[[room]]&via=overlemonsoft&text=¡Estoy en viaje! Mirá mi posición en tiempo real.' target='_blank'><span class='fadeInLeft fa fa-twitter'></span></a>
-        <a href='https://www.facebook.com/sharer/sharer.php?u=https://jendo.glitch.me/[[room]]&t=¡Estoy en viaje! Mirá mi posición en tiempo real.' target='_blank'><span class='fadeInLeft1 fa fa-facebook'></span></a>
-        <a class='is-hidden-desktop' href='whatsapp://send?text=¡Estoy en viaje! Mirá mi posición en tiempo real. https://jendo.glitch.me/[[room]]' target='_blank'><span class='fadeInLeft2 fa fa-whatsapp'></span></a>
+        <a href='https://twitter.com/share?url=https://jendo.glitch.me/[[room]]&via=overlemonsoft&text=¡Estoy en viaje! Mirá mi posición en tiempo real.' target='_blank'>
+          <span class='fadeInLeft fa fa-twitter'></span>
+        </a>
+        <a href='https://www.facebook.com/sharer/sharer.php?u=https://jendo.glitch.me/[[room]]&t=¡Estoy en viaje! Mirá mi posición en tiempo real.' target='_blank'>
+          <span class='fadeInLeft1 fa fa-facebook'></span>
+        </a>
+        <a class='is-hidden-desktop' href='whatsapp://send?text=¡Estoy en viaje! Mirá mi posición en tiempo real. https://jendo.glitch.me/[[room]]' target='_blank'>
+          <span class='fadeInLeft2 fa fa-whatsapp'></span>
+        </a>
     </div>
   </script>
 
