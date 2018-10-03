@@ -3,6 +3,20 @@ const mapbox = {
 	style: 'mapbox://styles/mapbox/basic-v8'
 }
 
+function changename(){
+	var store = JSON.parse(localStorage.getItem('chat')) || {room:document.querySelector("html").getAttribute("room"),name:randNick()};
+	var $name = prompt("Ingresa tu nombre",store.name);
+
+	if ($name == null || $name.trim() == "") {
+		alert("Debes ingresar un nombre");
+	} else {
+		store.name = $name;
+		localStorage.setItem("chat",JSON.stringify(store));
+		location.href = location.href;
+	}
+}
+
+
 function randNick() {
 	const firsts = ['Nube','Cielo','Toro','La Vaca','Tigre','Zorro','Pájaro','Lago','Laguna'];
 	const lasts = ['Verde','Azul','Amarillo','Blanco','Violeta','Alegre','Alejado','Fortuito','Ruidoso','Veloz','Bravo','Sentado','Corriendo'];
@@ -140,10 +154,10 @@ const Chat = {
 				const color = self.colors[i];
 
 				ul.append(jQuery('<li></li>')
-				.attr('color',color)
-				.attr('from',user)
-				.text(user)
-				.css('color',color));
+					.attr('color',color)
+					.attr('from',user)
+					.text(user)
+					.css('color',color));
 			});
 
 			jQuery('#users').html(ul);
@@ -241,21 +255,15 @@ const Chat = {
 	methods: {
 		sendMessage:function({type,target}){
 			var messageTextbox = $('input[name="message"]');
-			this.socket.emit('createMessage', {
-				text: messageTextbox.val()
-			}, function () {
-				messageTextbox.val('')
-			});
-		},
-		toggleChat:function({type,target}){
-			var span = $(target).find('.fa');
-			$('.chat__messages').toggle(0, function () {
-				if($(this).is(':hidden')){
-					span.removeClass('fa-toggle-on').addClass('fa-toggle-off');
-				} else {
-					span.removeClass('fa-toggle-off').addClass('fa-toggle-on');
-				}
-			});
+			if(messageTextbox.val().trim()==''){
+				$('.chat__messages').toggle();
+			} else {
+				this.socket.emit('createMessage', {
+					text: messageTextbox.val()
+				}, function () {
+					messageTextbox.val('')
+				});
+			}
 		},
 		initLayers:function(){
 			var styleList = document.getElementById('styles');
@@ -328,6 +336,15 @@ var menuSwiper = null;
 const app = new Vue({ 
 	router: router,
 	created: function(){
+
+		// status
+		var store = JSON.parse(localStorage.getItem('chat'));
+
+		if(store && store.name){
+			$('.menu ul').append("<li><a href='#' class='has-text-success' onclick='changename()'>"+store.name+"</a></li>")
+		}		          
+
+		// menu swiper
 		setTimeout(function(){
 			var menuButton = document.querySelector('.menu-button');
 			menuSwiper = new Swiper('.swiper-container-m', {
@@ -361,7 +378,6 @@ const app = new Vue({
 		$('.hidden-loading').removeClass('hidden-loading');
 	} 
 }).$mount('#app');
-
 
 $(document).on('click',"a:not([href*=':'])",function(event){
 

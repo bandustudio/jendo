@@ -245,13 +245,6 @@
 
       <div class='chat__input'>
         <div class="field is-grouped">
-          <p class="control">
-            <button class='button is-info is-rounded' @click="toggleChat">
-              <span class='icon has-text-white'>
-                <i class='fa fa-toggle-on'></i>
-              </span>
-            </button>
-          </p>
           <p class="control is-expanded">
             <input class='input is-rounded' type='text' name='message' placeholder='Mensaje' autofocus autocomplete='off'>
           </p>
@@ -295,15 +288,15 @@
   
   <script id='share' type='text/template'>
     <div class='sharetools'>
-        <a href='https://twitter.com/share?url=https://jendo.glitch.me/[[room]]&via=overlemonsoft&text=¡Estoy en viaje! Mirá mi posición en tiempo real.' target='_blank'>
-          <span class='fadeInLeft fa fa-twitter'></span>
-        </a>
-        <a href='https://www.facebook.com/sharer/sharer.php?u=https://jendo.glitch.me/[[room]]&t=¡Estoy en viaje! Mirá mi posición en tiempo real.' target='_blank'>
-          <span class='fadeInLeft1 fa fa-facebook'></span>
-        </a>
-        <a class='is-hidden-desktop' href='whatsapp://send?text=¡Estoy en viaje! Mirá mi posición en tiempo real. https://jendo.glitch.me/[[room]]' target='_blank'>
-          <span class='fadeInLeft2 fa fa-whatsapp'></span>
-        </a>
+      <a href='https://twitter.com/share?url=https://jendo.glitch.me/[[room]]&via=overlemonsoft&text=¡Estoy en viaje! Mirá mi posición en tiempo real.' target='_blank'>
+        <span class='fadeInLeft fa fa-twitter'></span>
+      </a>
+      <a href='https://www.facebook.com/sharer/sharer.php?u=https://jendo.glitch.me/[[room]]&t=¡Estoy en viaje! Mirá mi posición en tiempo real.' target='_blank'>
+        <span class='fadeInLeft1 fa fa-facebook'></span>
+      </a>
+      <a class='is-hidden-desktop' href='whatsapp://send?text=¡Estoy en viaje! Mirá mi posición en tiempo real. https://jendo.glitch.me/[[room]]' target='_blank'>
+        <span class='fadeInLeft2 fa fa-whatsapp'></span>
+      </a>
     </div>
   </script>
 
