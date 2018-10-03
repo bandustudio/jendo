@@ -249,12 +249,13 @@ const Chat = {
 		},
 		toggleChat:function({type,target}){
 			var span = $(target).find('.fa');
-			if(span.hasClass('fa-toggle-on')){
-				span.removeClass('fa-toggle-on').addClass('fa-toggle-off');
-			} else {
-				span.removeClass('fa-toggle-off').addClass('fa-toggle-on');
-			}
-			$('.chat__messages').toggle();
+			$('.chat__messages').toggle(0, function () {
+				if($(this).is(':hidden')){
+					span.removeClass('fa-toggle-on').addClass('fa-toggle-off');
+				} else {
+					span.removeClass('fa-toggle-off').addClass('fa-toggle-on');
+				}
+			});
 		},
 		initLayers:function(){
 			var styleList = document.getElementById('styles');
