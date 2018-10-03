@@ -4,39 +4,12 @@ const mapbox = {
 }
 
 function randNick() {
-	const firsts = [
-		'Nube',
-		'Cielo',
-		'Toro',
-		'La Vaca',
-		'Tigre',
-		'Zorro',
-		'Pájaro',
-		'Lago',
-		'Laguna'
-	];
-
-	const lasts = [
-		'Verde',
-		'Azul',
-		'Amarillo',
-		'Blanco',
-		'Violeta',
-		'Alegre',
-		'Alejado',
-		'Fortuito',
-		'Ruidoso',
-		'Veloz',
-		'Bravo',
-		'Sentado',
-		'Corriendo',
-	];
-
+	const firsts = ['Nube','Cielo','Toro','La Vaca','Tigre','Zorro','Pájaro','Lago','Laguna'];
+	const lasts = ['Verde','Azul','Amarillo','Blanco','Violeta','Alegre','Alejado','Fortuito','Ruidoso','Veloz','Bravo','Sentado','Corriendo'];
 	var first = firsts[Math.floor(Math.random()*firsts.length)];
 	var last = lasts[Math.floor(Math.random()*lasts.length)];
 	return `${first} ${last}`;
 }
-
 
 function createRandomString( length ) {
     var str = "";
@@ -118,7 +91,6 @@ const Chat = {
 			app.$router.push(document.querySelector("html").getAttribute("room"));
 			return;
 		}
-
 		
 		var chat = JSON.parse(localStorage.getItem('chat')) || {room:null,name:null};
 		var room = this.$route.params.room;
@@ -212,17 +184,18 @@ const Chat = {
 		    self.markers[message.from].addTo(self.map)
 		    $(self.markers[message.from].getElement()).removeClass('pulse').addClass('pulse')
 
-
 		    if(connected != Object.keys(self.markers).length){
 			    if(Object.keys(self.markers).length > 1){
 				    var bounds = new mapboxgl.LngLatBounds();
-				    bounds.extend([message.longitude,message.latitude]);
-				    self.map.fitBounds(bounds, { padding: 50 });
+				    for(var i in self.markers){
+				    	var p = self.markers[i].getLngLat();
+				    	bounds.extend([p.lng,p.lat]);	
+				    }				    
+				    self.map.fitBounds(bounds, { padding: 100 });
 				} else {
-					self.map.setCenter([message.longitude,message.latitude]);
+					console.log("set center")
 				}
 			}
-
 		});
 
 		/* map and geoloc */
