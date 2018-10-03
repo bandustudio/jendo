@@ -203,7 +203,7 @@ const Chat = {
 
 		socket.on('newLocationMessage', function (message) {
 
-			var center = false;
+			var connected = Object.keys(self.markers).length;
 
 		    if(!self.markers[message.from]){
 		        var el = document.createElement('div');
@@ -216,15 +216,15 @@ const Chat = {
 				});		        
 				el.innerHTML = html;
 		        self.markers[message.from] = new mapboxgl.Marker(el);
-		        center = true;
 		    }
 
 		    self.markers[message.from].setLngLat([message.longitude,message.latitude])
 		    self.markers[message.from].addTo(self.map)
 		    $(self.markers[message.from].getElement()).removeClass('pulse').addClass('pulse')
 
-		    if(center){
-			    if(self.markers.length > 1){
+
+		    if(connected != Object.keys(self.markers).length){
+			    if(Object.keys(self.markers).length > 1){
 				    var bounds = new mapboxgl.LngLatBounds();
 				    bounds.extend([message.longitude,message.latitude]);
 				    self.map.fitBounds(bounds, { padding: 50 });
@@ -232,6 +232,7 @@ const Chat = {
 					self.map.setCenter([message.longitude,message.latitude]);
 				}
 			}
+
 		});
 
 		/* map and geoloc */
@@ -332,6 +333,7 @@ const Chat = {
 	},
 	data: function() {
 		return{
+			connected:0,
 		  	map:null,
 		  	name:null,
 		  	room:null,
