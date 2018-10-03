@@ -523,6 +523,18 @@ body {
 	-ms-transform: translateY(-1.5px) rotate(4.5deg);
 	transform: translateY(-1.5px) rotate(4.5deg);
 }
+.cross {
+	margin-left: -3.85em;
+}
+
+.cross .bar {
+	background-color: white;
+}
+
+.cross .logo {
+	color: white;
+}
+
 .cross .bar:nth-of-type(1) {
 	-webkit-transform: translateY(10px) rotate(-45deg);
 	-ms-transform: translateY(10px) rotate(-45deg);
