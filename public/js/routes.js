@@ -147,7 +147,7 @@ const Chat = {
 		  	});
 		});
 
-		this.socket.on('disconnect', function () {
+		this.socket.on('disconnect', function (user) {
 		  	console.log('Disconnected from server');
 		});
 
@@ -156,7 +156,8 @@ const Chat = {
 
 			users.forEach(function (user,i) {
 				const color = self.colors[i];
-
+				console.log("1");
+				console.log(user);
 				ul.append(jQuery('<li></li>')
 					.attr('color',color)
 					.attr('from',user)
@@ -165,6 +166,16 @@ const Chat = {
 			});
 
 			jQuery('#users').html(ul);
+
+			// markers
+			console.log(self.markers)
+			self.markers.forEach(function (marker,i) {
+				console.log("2");
+				console.log(i);
+				console.log(marker);
+			});
+
+
 		});
 
 		this.socket.on('newMessage', function (message) {
@@ -259,18 +270,32 @@ const Chat = {
 	methods: {
 		sendMessage:function({type,target}){
 			var messageTextbox = $('input[name="message"]');
+			var self = this;
 			if(messageTextbox.val().trim()==''){
-				$('.chat__messages').toggle();
+				$('.chat__messages').toggle(0,function(){
+					self.checkSendMessage(target);
+				});
 			} else {
 				if($('.chat__messages').is(':hidden')){
-					$('.chat__messages').toggle();
+					$('.chat__messages').toggle(0,function(){
+						self.checkSendMessage(target);
+					});
 				}
 				this.socket.emit('createMessage', {
 					text: messageTextbox.val()
 				}, function () {
-					messageTextbox.val('')
+					messageTextbox.val('');
 				});
 			}
+		},
+		checkSendMessage:function(target){
+			setTimeout(function(){
+				if($('.chat__messages').is(':hidden')){
+					$(target).removeClass('is-success').addClass('is-danger');
+				} else {
+					$(target).removeClass('is-danger').addClass('is-success');					
+				}
+			},10);
 		},
 		initLayers:function(){
 			var styleList = document.getElementById('styles');
@@ -359,6 +384,7 @@ const app = new Vue({
 			  initialSlide: 1,
 			  resistanceRatio: 0,
 			  slideToClickedSlide: true,
+			  allowTouchMove: false,
 			  on: {
 			    init: function () {
 			      var slider = this;
