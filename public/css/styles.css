@@ -108,10 +108,10 @@ body {
 .chat__line { 
 	position: relative; 
 	background: white; 
-	opacity: 0.8;
 	padding: 0.7em 1.2em;
 	border-radius: .4em; 
-	box-shadow: 0 0 0.25em #666;	
+	/*opacity: 0.8;
+	box-shadow: 0 0 0.25em #666;*/
 } 
 
 .chat__line + .chat__line {
@@ -135,7 +135,7 @@ body {
 
 .chat__line.me { 
 	background: #f1f1f1; 
-	box-shadow: 0 0 0.25em #999;
+	/*box-shadow: 0 0 0.25em #999;*/
 } 
 
 .chat__line.me:after { 

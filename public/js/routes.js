@@ -3,6 +3,11 @@ const mapbox = {
 	style: 'mapbox://styles/mapbox/basic-v8'
 }
 
+function getInitials(str){
+	var initials = str.match(/\b\w/g) || [];
+	return ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
+}
+
 function changename(){
 	var store = JSON.parse(localStorage.getItem('chat')) || {room:document.querySelector("html").getAttribute("room"),name:randNick()};
 	var $name = prompt("Ingresa tu nombre",store.name);
@@ -187,7 +192,7 @@ const Chat = {
 		        var color = $('#users li[from="'+message.from+'"]').attr('color');
 				var initials = message.from.match(/\b\w/g) || [];
 				var html = Mustache.render(template, {
-				    initials: ((initials.shift() || '') + (initials.pop() || '')).toUpperCase(),
+				    initials: getInitials(message.from),
 				    from: message.from,
 				    color: color
 				});		        
