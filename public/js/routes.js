@@ -156,8 +156,6 @@ const Chat = {
 
 			users.forEach(function (user,i) {
 				const color = self.colors[i];
-				console.log("1");
-				console.log(user);
 				ul.append(jQuery('<li></li>')
 					.attr('color',color)
 					.attr('from',user)
@@ -168,14 +166,12 @@ const Chat = {
 			jQuery('#users').html(ul);
 
 			// markers
-			console.log(self.markers)
-			self.markers.forEach(function (marker,i) {
-				console.log("2");
-				console.log(i);
-				console.log(marker);
-			});
-
-
+			for(var i in self.markers){
+				$(self.markers[i].getElement()).removeClass('lost');
+				if($.inArray(i,users) === -1){
+					$(self.markers[i].getElement()).addClass('lost')
+				}
+			};
 		});
 
 		this.socket.on('newMessage', function (message) {
