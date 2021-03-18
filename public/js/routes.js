@@ -3,26 +3,6 @@ const mapbox = {
 	style: 'mapbox://styles/mapbox/basic-v8'
 }
 
-function sendCoordinates () {
-  	if (!navigator.geolocation) {
-    	alert('Geolocation not supported by your browser.');
-  	} else {
-
-	  	navigator.geolocation.watchPosition(function(position){
-		    io().emit('createLocationMessage', {
-		      	latitude: position.coords.latitude,
-		      	longitude: position.coords.longitude
-		    });
-
-	  	}, function(e) {
-	  		alert('Could not get coords.');
-	  	}, {
-        	enableHighAccuracy: true,
-        	maximumAge: 5000 // 5 sec.
-      	});
-	}	
-}
-
 function createRoom (e) {
 	e.preventDefault()
 	app.$router.push(uuidv4())
@@ -190,8 +170,6 @@ const Chat = {
 		  	console.log('Disconnected from server');
 		});
 
-		this.socket.on('sendGeolocation', sendCoordinates)
-
 		this.socket.on('updateUserList', function (users) {
 			var ul = jQuery('<ul></ul>');
 
@@ -251,7 +229,7 @@ const Chat = {
 		    self.markers[message.from].addTo(self.map)
 		    $(self.markers[message.from].getElement()).removeClass('pulse').addClass('pulse')
 
-		    if(connected != Object.keys(self.markers).length){
+		    if(Object.keys(self.markers).length){
 		    	if(Object.keys(self.markers).length > connected){
 		    		playAudio('notification');
 		    	}
@@ -289,7 +267,23 @@ const Chat = {
 		  jQuery('.chat').append(html);
         },5000);
 
-        sendCoordinates()
+	  	if (!navigator.geolocation) {
+	    	alert('Geolocation not supported by your browser.');
+	  	} else {
+
+		  	navigator.geolocation.watchPosition(function(position){
+			    self.socket.emit('createLocationMessage', {
+			      	latitude: position.coords.latitude,
+			      	longitude: position.coords.longitude
+			    });
+
+		  	}, function(e) {
+		  		alert('Could not get coords.');
+		  	}, {
+	        	enableHighAccuracy: true,
+	        	maximumAge: 5000 // 5 sec.
+	      	});
+		}
 	},
 	methods: {
 		sendMessage:function(){
