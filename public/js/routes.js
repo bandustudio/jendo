@@ -3,6 +3,19 @@ const mapbox = {
 	style: 'mapbox://styles/mapbox/basic-v8'
 }
 
+function createRoom (e) {
+	e.preventDefault()
+	app.$router.push(uuidv4())
+	return false
+}
+
+function uuidv4() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
 function getInitials(str){
 	var initials = str.match(/\b\w/g) || [];
 	return ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
@@ -112,7 +125,7 @@ const Chat = {
 
 		if(!this.$route.params.room){
 			alert("Debes ingresar al menos una identifición de conversación");
-			app.$router.push(document.querySelector("html").getAttribute("room"));
+			app.$router.push(uuidv4());
 			return;
 		}
 		
@@ -273,7 +286,8 @@ const Chat = {
 		}
 	},
 	methods: {
-		sendMessage:function({type,target}){
+		sendMessage:function(){
+			var target = $('chat_send')
 			var messageTextbox = $('input[name="message"]');
 			var self = this;
 			if(messageTextbox.val().trim()==''){

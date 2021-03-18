@@ -63,9 +63,7 @@ app.set('views', viewsPath);
 app.engine('html', engine.mustache);
 app.set('view engine', 'html');
 app.get('*', function(req, res) {
-  res.render('index',{ 
-    room : uuid.v4() 
-  });
+  res.render('index');
 });
 
 server.listen(port, () => {
