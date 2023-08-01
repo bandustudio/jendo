@@ -233,7 +233,7 @@ const Chat = {
 		    	if(Object.keys(self.markers).length > connected){
 		    		playAudio('notification');
 		    	}
-			    if(Object.keys(self.markers).length > 1){
+			    if(Object.keys(soelf.markers).length > 1){
 				    var bounds = new mapboxgl.LngLatBounds();
 				    for(var i in self.markers){
 				    	var p = self.markers[i].getLngLat();
@@ -248,41 +248,38 @@ const Chat = {
 
 		/* map and geoloc */
 		setTimeout(function(){
-        	mapboxgl.accessToken = mapbox.accessToken
-	        self.map = new mapboxgl.Map({
-	            container: 'map',
-	            center: [0,0],
-	            style:mapbox.style,
-	            zoom: 14
-	        });
+    	mapboxgl.accessToken = mapbox.accessToken
+      self.map = new mapboxgl.Map({
+          container: 'map',
+          center: [0,0],
+          style:mapbox.style,
+          zoom: 0
+      });
 
 			self.initLayers();        
-        },1);
+    },1);
 
-        setTimeout(function(){
+    setTimeout(function(){
 		  var template = jQuery('#share').html();
 		  var html = Mustache.render(template, {
 		    room: chat.room
 		  });
 		  jQuery('.chat').append(html);
-        },5000);
+    },5000);
 
-	  	if (!navigator.geolocation) {
-	    	alert('Geolocation not supported by your browser.');
-	  	} else {
+  	if (!navigator.geolocation) {
+    	alert('Geolocation not supported by your browser.');
+  	} else {
 
-		  	navigator.geolocation.watchPosition(function(position){
-			    self.socket.emit('createLocationMessage', {
-			      	latitude: position.coords.latitude,
-			      	longitude: position.coords.longitude
-			    });
+	  	navigator.geolocation.watchPosition(function(position){
+		    self.socket.emit('createLocationMessage', {
+		      	latitude: position.coords.latitude,
+		      	longitude: position.coords.longitude
+		    });
 
-		  	}, function(e) {
-		  		alert('Could not get coords.');
-		  	}, {
-	        	enableHighAccuracy: true,
-	        	maximumAge: 5000 // 5 sec.
-	      	});
+	  	}, function(e) {
+	  		alert('Could not get coords.');
+	  	});
 		}
 	},
 	methods: {
@@ -330,22 +327,22 @@ const Chat = {
 			}
 		},
 		switchLayer: function (layer) {
-		    var style = {
-		    	id:layer.target.value,
-		    	url:'mapbox://styles/mapbox/' + layer.target.value + '-v9'
-		    };
-		    localStorage.setItem("style", JSON.stringify(style));
-		    this.map.setStyle(style.url);
+	    var style = {
+	    	id:layer.target.value,
+	    	url:'mapbox://styles/mapbox/' + layer.target.value + '-v9'
+	    };
+	    localStorage.setItem("style", JSON.stringify(style));
+	    this.map.setStyle(style.url);
 		}	
 	},
 	data: function() {
 		return{
 			socket:null,
-		  	map:null,
-		  	name:null,
-		  	room:null,
-		  	markers:[],
-		  	colors:["#fc0d1b","#46e166","#583470","#f313b5","#1369f3","#cdf313","#f39d13"]
+	  	map:null,
+	  	name:null,
+	  	room:null,
+	  	markers:[],
+	  	colors:["#fc0d1b","#46e166","#583470","#f313b5","#1369f3","#cdf313","#f39d13"]
 		}
 	}
 }
